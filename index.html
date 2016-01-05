@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Practice Timer</title>
+</head>
+<body style="background: black; max-height=100%">
+  <div style="float:center; max-height=100%">
+    <g style="float:center">
+      <svg xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewbox="0 0 500 500">
+        <defs>
+          <radialGradient id="round" cx="50%" cy="300%" fx="40%" fy="80%"
+          r="295%" spreadMethod="pad">
+            <stop offset="0%" style="stop-color:white; stop-opacity:0" />
+            <stop id="opaqueStop" offset="100%" style="stop-color:white; stop-opacity:1" />
+          </radialGradient>
+
+          <!-- <linearGradient id="linear" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="5%" style="stop-color:#ffffff; stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ffffff; stop-opacity:0" />
+          </linearGradient> -->
+        </defs>
+
+        <image x="0" y="0" width="100%" height="100%"
+          xlink:href="enso.svg" />
+
+        <rect x="265" y="20" width="75" height="80"
+          style="fill:url(#round);
+          stroke: none;"
+          transform="rotate(-83, 300, 60)" />
+        <path d="M263, 52 A198,198 0 0,0 245,452"
+                 style="stroke:gray; stroke-width: 65; fill: none; stroke-opacity: 0;" />
+        <path d="M243, 452 A198,198 0 0,0 340,75"
+                 style="stroke:goldenrod; stroke-width: 65; fill: none; stroke-opacity: 0;" />
+
+        <circle cx="250" cy="250" r="198" style="stroke: white; fill: none; stroke-width: 65; stroke-opacity: 1; stroke-dasharray: 1218; stroke-dashoffset: 0;" transform="rotate(-78.75,250,250)" />
+
+      </svg>
+    </g>
+
+  </div>
+
+  <script type="text/javascript">
+    var duration = 10000,
+        prePause = duration * 0.96,
+        pause = duration - prePause,
+        lastTime = null,
+        angle = -84, radians = (angle + 8) * (Math.PI / 180),
+        angleSweep = 345.8, sweepRadians = angleSweep * (Math.PI / 180),
+        dashOffset = 0, dashSweep = 1195,
+        radius = 198;
+
+    var angleIncr = angleSweep / prePause,
+        radianIncr = sweepRadians / prePause,
+        dashIncr = dashSweep / prePause;
+
+    var rect = document.querySelector("rect"),
+        circle = document.querySelector("circle");
+        stop = document.getElementById("opaqueStop")
+
+    // var x = 216 + Math.cos(radians) * radius,
+    //     y = 212 + Math.sin(radians) * radius,
+    //     transfX = x + 37.5,
+    //     transfY = y + 40,
+    //     transform = "rotate(" + angle + "," + transfX + "," + transfY + ")";
+    // rect.setAttribute("x", x);
+    // rect.setAttribute("y", y);
+    // rect.setAttribute("transform", transform);
+    // circle.style['stroke-dashoffset'] = dashOffset;
+
+    function animate(time) {
+      if (duration <= 0) {
+        // alert("Done!")
+        return;
+      }
+      else if (lastTime != null) {
+        elapsed = time - lastTime;
+        angle -= angleIncr * elapsed;
+        radians -= radianIncr * elapsed;
+        dashOffset += dashIncr * elapsed;
+        duration -= elapsed;
+      }
+      lastTime = time;
+
+      if (duration >= pause) {
+        var x = 216 + Math.cos(radians) * radius,
+        y = 210 + Math.sin(radians) * radius,
+        transfX = x + 37.5,
+        transfY = y + 40,
+        transform = "rotate(" + angle + "," + transfX + "," + transfY + ")";
+        rect.setAttribute("x", x);
+        rect.setAttribute("y", y);
+        rect.setAttribute("transform", transform);
+        circle.style['stroke-dashoffset'] = dashOffset;
+      }
+      else if (duration < pause) {
+        var opacity = duration / pause;
+        stop.style["stop-opacity"] = opacity;
+      }
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
+<!--
+<rect x="265" y="20" width="70" height="80"
+  style="fill:url(#round);
+  stroke: none;"
+  transform="rotate(-83, 300, 60)"/>
+<path d="M263, 52 A200,200 0 1,0 340,75"
+         style="stroke:goldenrod; stroke-width: 62; fill: none; stroke-opacity: .2;" /> -->
+
+<!-- two arcs, starting position -->
+         <!-- <path d="M265, 52 A200,200 0 0,0 245,452"
+                  style="stroke:gray; stroke-width: 64; fill: none; stroke-opacity: 0.5;" />
+         <path d="M243, 452 A200,200 0 0,0 340,75"
+                  style="stroke:goldenrod; stroke-width: 62; fill: none; stroke-opacity: .2;" /> -->
+
+<!-- circle start -->
+        <!-- <circle cx="250" cy="250" r="198" style="stroke: goldenrod; fill: none; stroke-width: 65; stroke-opacity: 0.2; stroke-dasharray: 1218; stroke-dashoffset: 0;" transform="rotate(-78.75,250,250)" /> -->
+
+<!-- circle end -->
+        <!-- <circle cx="250" cy="250" r="198" style="stroke: goldenrod; fill: none; stroke-width: 65; stroke-opacity: 0.3; stroke-dasharray: 1210; stroke-dashoffset: 1163;" transform="rotate(-76.5,250,250)" /> -->
