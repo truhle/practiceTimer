@@ -35,18 +35,21 @@
   </div>
 
   <script type="text/javascript">
-    var duration = 20000,
-        prePause = duration * 0.954,
-        pause = duration - prePause,
-        lastTime = null,
-        angle = -84, radians = (angle + 8) * (Math.PI / 180),
+    var mins = 2, duration = mins * 60000,
+        primaryTime = duration * 0.954,
+        ending = duration - primaryTime,
+        lastTime = null, shortDur = false;
+
+    var pause = false;
+
+    var angle = -84, radians = (angle + 8) * (Math.PI / 180),
         angleSweep = 343.5, sweepRadians = angleSweep * (Math.PI / 180),
         dashOffset = 0, dashSweep = 1187,
         radius = 198;
 
-    var angleIncr = angleSweep / prePause,
-        radianIncr = sweepRadians / prePause,
-        dashIncr = dashSweep / prePause;
+    var angleIncr = angleSweep / primaryTime,
+        radianIncr = sweepRadians / primaryTime,
+        dashIncr = dashSweep / primaryTime;
 
     var rect = document.querySelector("rect"),
         circle = document.querySelector("circle");
@@ -65,7 +68,7 @@
       }
       lastTime = time;
 
-      if (duration >= pause) {
+      if (duration >= ending) {
         var x = 210 + Math.cos(radians) * radius,
         y = 210 + Math.sin(radians) * radius,
         transfX = x + 40,
@@ -76,13 +79,51 @@
         rect.setAttribute("transform", transform);
         circle.style['stroke-dashoffset'] = dashOffset;
       }
-      else if (duration < pause) {
-        var opacity = duration / pause;
+      else if (duration < ending) {
+        var opacity = duration / ending;
         stop.style["stop-opacity"] = opacity;
       }
-      requestAnimationFrame(animate);
+      if (shortDur == true)
+        requestAnimationFrame(animate)
     }
-    requestAnimationFrame(animate);
+
+    function runFPS(fpsInterval) {
+      setInterval(function() {
+        if (duration > 0 && pause == false)
+          requestAnimationFrame(animate)
+      }, fpsInterval);
+    }
+
+    function setFPS(duration) {
+      var secs = duration / 1000, mins = secs / 60, fps = 45;
+      if (secs < 120)
+        shortDur = true;
+      else {
+        shortDur = false;
+        if (mins <= 5)
+          fps = Math.ceil(45 - ((mins - 2) * 5) );
+        else if (mins <= 10)
+          fps = Math.ceil(30 - ((mins - 5) * 2) );
+        else if (mins > 10 && mins <= 15)
+          fps = 20;
+        else if (mins < 20)
+          fps = Math.ceil(20 - ((mins - 15) * 2));
+        else if (mins < 30)
+          fps = mins < 25 ? 6 : 4;
+        else
+          fps = 2;
+      }
+      return fps;
+    }
+
+    var fps = setFPS(duration);
+    var fpsInterval = Math.ceil(1000 / fps);
+
+    if (shortDur == false)
+      runFPS(fpsInterval);
+    else
+      requestAnimationFrame(animate);
+
   </script>
 </body>
 </html>
