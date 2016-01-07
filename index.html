@@ -70,46 +70,64 @@
     }
 
 
-    var duration, primaryTime, ending, fps, fpsInterval,
+    var duration, primaryTime, tailTime, fps, fpsInterval,
         lastTime = null, shortDur = false;
 
     var angleIncr, radianIncr, dashIncr;
 
-    var pause = true;
+    var paused = false, wasPaused = false, pauseStartTime;
 
     var angle = -84, radians = (angle + 8) * (Math.PI / 180),
         angleSweep = 343.5, sweepRadians = angleSweep * (Math.PI / 180),
         dashOffset = 0, dashSweep = 1187,
         radius = 198;
 
-    function setTimer(e) {
+    function setTimer() {
+      // e.preventDefault();
+
       hours = Number(document.settings.hours.value);
       mins = Number(document.settings.mins.value);
       secs = Number(document.settings.secs.value);
 
       duration = ((hours * 3600) + (mins * 60) + secs) * 1000;
       primaryTime = duration * 0.954;
-      ending = duration - primaryTime;
+      tailTime = duration - primaryTime;
       angleIncr = angleSweep / primaryTime,
       radianIncr = sweepRadians / primaryTime,
       dashIncr = dashSweep / primaryTime;
 
-      fps = setFPS(duration);
-      fpsInterval = Math.ceil(1000 / fps);
+      setFPS(duration);
 
       choose.style.display = "none";
       enso.style.display = "block";
 
-      startTimer();
+      window.addEventListener("keydown", function(event) {
+        var code = event.keyCode;
+        if (code == "80" || code == "27") {
+          if (!paused) {
+            paused = true;
+          }
+          else {
+            paused = false;
+            startTimer();
+          }
+        }
+      });
 
-      return false;
+      startTimer();
     }
 
     function animate(time) {
       if (duration <= 0) {
         return;
       }
+      else if (paused) {
+        catchPauseInterval(time);
+        return;
+      }
       else if (lastTime != null) {
+        if (wasPaused)
+          resumeFromPause(time);
         elapsed = time - lastTime;
         angle -= angleIncr * elapsed;
         radians -= radianIncr * elapsed;
@@ -118,7 +136,7 @@
       }
       lastTime = time;
 
-      if (duration >= ending) {
+      if (duration >= tailTime) {
         var x = 210 + Math.cos(radians) * radius,
         y = 210 + Math.sin(radians) * radius,
         transfX = x + 40,
@@ -129,17 +147,28 @@
         rect.setAttribute("transform", transform);
         circle.style['stroke-dashoffset'] = dashOffset;
       }
-      else if (duration < ending) {
-        var opacity = duration / ending;
+      else if (duration < tailTime) {
+        var opacity = duration / tailTime;
         stop.style["stop-opacity"] = opacity;
       }
       if (shortDur == true)
         requestAnimationFrame(animate)
     }
 
+    function catchPauseInterval(time) {
+      pauseStartTime = time;
+      wasPaused = true;
+    }
+
+    function resumeFromPause(time) {
+      var pauseInterval = time - pauseStartTime;
+      lastTime += pauseInterval;
+      wasPaused = false;
+    }
+
     function runFPS(fpsInterval) {
       setInterval(function() {
-        if (duration > 0 && pause == false)
+        if (duration > 0 && paused == false)
           requestAnimationFrame(animate)
       }, fpsInterval);
     }
@@ -163,7 +192,7 @@
         else
           fps = 2;
       }
-      return fps;
+      fpsInterval = Math.ceil(1000 / fps);
     }
 
     function startTimer() {
