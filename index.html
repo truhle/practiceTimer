@@ -3,9 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <title>Practice Timer</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body style="background: white; height: 100%">
-  <div style="height: 100%">
+  <div id="choose">
+    <h1 class="title">Choose</h1>
+
+    <form id="settings" name="settings" onsubmit="event.preventDefault(); setTimer();">
+      <label> Hours
+        <input id="hours" type="number" name="hours" value="" min="0" placeholder="&#8212" max="120" maxlength="3">
+      </label><br>
+
+      <label> Minutes
+        <input id="mins" type="number" name="mins" placeholder="&#8212" value="" min="0" max="120" maxlength="3">
+      </label><br>
+
+      <label> Seconds
+        <input id="secs" type="number" name="secs" placeholder="&#8212" value="20" min="0" max="120" maxlength="3">
+      </label><br>
+
+      <input class="button" type="submit" name="start" value="Start">
+    </form>
+  </div>
+  <div id="enso" style="height: 100%; display: none;" >
     <g style="height: 100%">
       <svg xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewbox="0 0 500 500">
@@ -35,25 +55,55 @@
   </div>
 
   <script type="text/javascript">
-    var mins = 2, duration = mins * 60000,
-        primaryTime = duration * 0.954,
-        ending = duration - primaryTime,
+    var choose, ense, settings, rect, circle, stop;
+
+    window.onload = function () {
+      choose = document.querySelector("#choose");
+      enso = document.querySelector("#enso");
+      settings = document.getElementById("settings");
+
+      rect = document.querySelector("rect");
+      circle = document.querySelector("circle");
+      stop = document.getElementById("opaqueStop");
+
+      settings.addEventListener("onsubmit", setTimer);
+    }
+
+
+    var duration, primaryTime, ending, fps, fpsInterval,
         lastTime = null, shortDur = false;
 
-    var pause = false;
+    var angleIncr, radianIncr, dashIncr;
+
+    var pause = true;
 
     var angle = -84, radians = (angle + 8) * (Math.PI / 180),
         angleSweep = 343.5, sweepRadians = angleSweep * (Math.PI / 180),
         dashOffset = 0, dashSweep = 1187,
         radius = 198;
 
-    var angleIncr = angleSweep / primaryTime,
-        radianIncr = sweepRadians / primaryTime,
-        dashIncr = dashSweep / primaryTime;
+    function setTimer(e) {
+      hours = Number(document.settings.hours.value);
+      mins = Number(document.settings.mins.value);
+      secs = Number(document.settings.secs.value);
 
-    var rect = document.querySelector("rect"),
-        circle = document.querySelector("circle");
-        stop = document.getElementById("opaqueStop")
+      duration = ((hours * 3600) + (mins * 60) + secs) * 1000;
+      primaryTime = duration * 0.954;
+      ending = duration - primaryTime;
+      angleIncr = angleSweep / primaryTime,
+      radianIncr = sweepRadians / primaryTime,
+      dashIncr = dashSweep / primaryTime;
+
+      fps = setFPS(duration);
+      fpsInterval = Math.ceil(1000 / fps);
+
+      choose.style.display = "none";
+      enso.style.display = "block";
+
+      startTimer();
+
+      return false;
+    }
 
     function animate(time) {
       if (duration <= 0) {
@@ -116,14 +166,12 @@
       return fps;
     }
 
-    var fps = setFPS(duration);
-    var fpsInterval = Math.ceil(1000 / fps);
-
-    if (shortDur == false)
-      runFPS(fpsInterval);
-    else
-      requestAnimationFrame(animate);
-
+    function startTimer() {
+      if (shortDur == false)
+        runFPS(fpsInterval);
+      else
+        requestAnimationFrame(animate);
+    }
   </script>
 </body>
 </html>
