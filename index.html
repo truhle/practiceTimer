@@ -55,7 +55,7 @@
   </div>
 
   <script type="text/javascript">
-    var choose, ense, settings, rect, circle, stop;
+    var choose, enso, settings, rect, circle, stop;
 
     window.onload = function () {
       choose = document.querySelector("#choose");
@@ -70,7 +70,7 @@
     }
 
 
-    var duration, primaryTime, tailTime, fps, fpsInterval,
+    var duration, primaryTime, tailTime, fpsInterval,
         lastTime = null, shortDur = false;
 
     var angleIncr, radianIncr, dashIncr;
@@ -81,6 +81,8 @@
         angleSweep = 343.5, sweepRadians = angleSweep * (Math.PI / 180),
         dashOffset = 0, dashSweep = 1187,
         radius = 198;
+
+    var sound;
 
     function setTimer() {
       // e.preventDefault();
@@ -114,11 +116,13 @@
         }
       });
 
+      setSound();
       startTimer();
     }
 
     function animate(time) {
       if (duration <= 0) {
+        makeSound();
         return;
       }
       else if (paused) {
@@ -160,6 +164,10 @@
       wasPaused = true;
     }
 
+    function makeSound() {
+      sound.play();
+    }
+
     function resumeFromPause(time) {
       var pauseInterval = time - pauseStartTime;
       lastTime += pauseInterval;
@@ -174,9 +182,11 @@
     }
 
     function setFPS(duration) {
-      var secs = duration / 1000, mins = secs / 60, fps = 45;
-      if (secs < 120)
+      var secs = duration / 1000, mins = secs / 60, fps;
+      if (secs < 120) {
         shortDur = true;
+        return;
+      }
       else {
         shortDur = false;
         if (mins <= 5)
@@ -193,6 +203,17 @@
           fps = 2;
       }
       fpsInterval = Math.ceil(1000 / fps);
+    }
+
+    function setSound() {
+      var sounds = {
+        "clear": "clear-bell-bowl.wav",
+        "engyoji": "engyoji-bell.mp3",
+        "high": "high-bell.wav",
+        "low": "low-bell-bowl.wav",
+        "med": "med-singing-bowl.wav"
+      }
+      sound = new Audio(sounds['engyoji']);
     }
 
     function startTimer() {
