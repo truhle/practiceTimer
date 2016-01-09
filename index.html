@@ -5,27 +5,118 @@
   <title>Practice Timer</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body style="background: white; height: 100%">
+
+<body>
   <div id="choose">
-    <h1 class="title">Choose</h1>
+    <h1 class="heading">Timer</h1>
 
     <form id="settings" name="settings" onsubmit="event.preventDefault(); setTimer();">
-      <label> Hours
+      <label class="center"> Hours
         <input id="hours" type="number" name="hours" value="" min="0" placeholder="&#8212" max="120" maxlength="3">
       </label><br>
 
-      <label> Minutes
+      <label class="center"> Minutes
         <input id="mins" type="number" name="mins" placeholder="&#8212" value="" min="0" max="120" maxlength="3">
       </label><br>
 
-      <label> Seconds
-        <input id="secs" type="number" name="secs" placeholder="&#8212" value="20" min="0" max="120" maxlength="3">
+      <label class="center"> Seconds
+        <input id="secs" type="number" name="secs" placeholder="&#8212" value="30" min="0" max="120" maxlength="3">
       </label><br>
+
+<!-- sound picker on top -->
+
+      <!-- <div id="sounds-container" class="container">
+        <label class="sound-select">
+          <div id="sounds-tile" class="tile">
+            <svg xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
+            <image x="10%" y="10%" width="80%" height="80%"
+            xlink:href="iconmonstr-bell-6.svg" />
+          </svg>
+        </div>
+        <select class="sounds" name="sounds">
+          <option value="clear">Clear Mid Bowl</option>
+          <option value="engyoji">Engyoji Temple</option>
+          <option value="high">High Bowl</option>
+          <option value="mid">Middle Bowl</option>
+          <option value="low">Low Bowl</option>
+        </select>
+      </label>
+    </div>
+
+      <div class="container">
+        <div class="tile radio-left selected">
+          <label class="radio">
+            <input id="enso-radio" type="radio" name="face" value="enso" checked="checked">
+            <svg xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
+              <image x="0" y="0" width="100%" height="100%"
+                xlink:href="no_background_enso.svg" />
+            </svg>
+          </label>
+        </div>
+
+        <div class="tile radio-right">
+          <label class="radio">
+            <input id="digital-radio" type="radio" name="face" value="digital">
+            <p>
+              30:00
+            </p>
+          </label>
+        </div>
+      </div> -->
+
+<!-- sound picker on bottom -->
+      <div id="sounds-container" class="container">
+        <label class="sound-select">
+          <div id="sounds-tile" class="tile">
+            <svg xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
+            <image x="10%" y="10%" width="80%" height="80%"
+            xlink:href="iconmonstr-sound-wave-1.svg" />
+          </svg>
+        </div>
+        <select class="sounds" name="sounds">
+          <option value="clear">Clear Mid Bowl</option>
+          <option value="engyoji">Engyoji Temple</option>
+          <option value="high">High Bowl</option>
+          <option value="mid">Middle Bowl</option>
+          <option value="low">Low Bowl</option>
+        </select>
+      </label>
+    </div>
+
+      <div class="container">
+        <div class="tile radio-left selected">
+          <label class="radio">
+            <input id="enso-radio" type="radio" name="face" value="enso" checked="checked">
+            <svg xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
+              <image x="0" y="0" width="100%" height="100%"
+                xlink:href="no_background_enso.svg" />
+            </svg>
+          </label>
+        </div>
+
+        <div class="tile radio-right">
+          <label class="radio">
+            <input id="digital-radio" type="radio" name="face" value="digital">
+            <p>
+              30:00
+            </p>
+          </label>
+        </div>
+      </div>
+
+      <div class="clear">
+
+      </div>
 
       <input class="button" type="submit" name="start" value="Start">
     </form>
   </div>
-  <div id="enso" style="height: 100%; display: none;" >
+
+  <div id="enso">
     <g style="height: 100%">
       <svg xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewbox="0 0 500 500">
@@ -49,22 +140,62 @@
         <circle cx="250" cy="250" r="198" style="stroke: white; fill: none;
           stroke-width: 65; stroke-opacity: 1; stroke-dasharray: 1218;
           stroke-dashoffset: 0;" transform="rotate(-78.75,250,250)" />
-
       </svg>
     </g>
   </div>
 
+  <div id="digital">
+    <p id="digits">
+
+    </p>
+  </div>
+
   <script type="text/javascript">
-    var choose, enso, settings, rect, circle, stop;
+    var choose, enso, settings, rect, circle, stop, radioLeft, radioRight, face="enso";
 
     window.onload = function () {
+      body = document.querySelector("body");
+
       choose = document.querySelector("#choose");
+      settings = document.querySelector("#settings");
+      radioLeft = document.querySelector(".radio-left");
+      radioRight = document.querySelector(".radio-right");
+
       enso = document.querySelector("#enso");
-      settings = document.getElementById("settings");
+      digital = document.querySelector("#digital")
+      digits = document.querySelector("#digits");
+
 
       rect = document.querySelector("rect");
       circle = document.querySelector("circle");
       stop = document.getElementById("opaqueStop");
+
+      radioLeft.onclick = function(e) {
+        e.preventDefault();
+        this.classList.add("selected");
+        radioRight.classList.remove("selected");
+        face = "enso";
+        document.querySelector("#enso-radio").checked = true;
+      };
+
+      radioRight.onclick = function(e) {
+        e.preventDefault();
+        this.classList.add("selected");
+        radioLeft.classList.remove("selected");
+        face = "digital";
+        document.querySelector("#digital-radio").checked = true;
+      };
+      // radioLeft.onclick = scopedToggleRadio(e, radioRight, "enso");
+      // radioRight.onclick = scopedToggleRadio(e, radioLeft, "digital");
+      //
+      // function scopedToggleRadio(e, other, faceName) {
+      //   return function() {
+      //     e.preventDefault();
+      //     this.className += " selected";
+      //     other.className = other.className.replace("selected", "");
+      //     face = faceName;
+      //   }
+      // }
 
       settings.addEventListener("onsubmit", setTimer);
     }
@@ -86,22 +217,34 @@
 
     function setTimer() {
       // e.preventDefault();
+      setSound();
 
       hours = Number(document.settings.hours.value);
       mins = Number(document.settings.mins.value);
       secs = Number(document.settings.secs.value);
 
       duration = ((hours * 3600) + (mins * 60) + secs) * 1000;
-      primaryTime = duration * 0.954;
-      tailTime = duration - primaryTime;
-      angleIncr = angleSweep / primaryTime,
-      radianIncr = sweepRadians / primaryTime,
-      dashIncr = dashSweep / primaryTime;
-
-      setFPS(duration);
 
       choose.style.display = "none";
-      enso.style.display = "block";
+
+      if (face == "enso") {
+        primaryTime = duration * 0.954;
+        tailTime = duration - primaryTime;
+        angleIncr = angleSweep / primaryTime,
+        radianIncr = sweepRadians / primaryTime,
+        dashIncr = dashSweep / primaryTime;
+
+        setFPS(duration);
+
+        body.style.background = "white";
+        enso.style.display = "block";
+      }
+      else if (face == "digital") {
+        body.style.background = "black";
+        digital.style.display = "block";
+      }
+
+      scrollTo(0, 0);
 
       window.addEventListener("keydown", function(event) {
         var code = event.keyCode;
@@ -116,16 +259,38 @@
         }
       });
 
-      setSound();
-      startTimer();
+      startTimer(face);
     }
 
-    function animate(time) {
+    function animateDigital(time) {
+      if (paused) {
+        catchPauseInterval(time);
+        return;
+      }
+      else if (lastTime != null) {
+        if (wasPaused)
+          resumeFromPause(time);
+        elapsed = time - lastTime;
+        duration -= elapsed;
+      }
+      lastTime = time;
+
       if (duration <= 0) {
         makeSound();
         return;
       }
-      else if (paused) {
+
+      var secs = Math.floor(duration / 1000) % 60,
+          mins = Math.floor(secs / 60) % 60,
+          hours = Math.floor(hours = mins / 60),
+          minsSecs = leftPad(mins) + ":" + leftPad(secs);
+
+      digits.innerHTML = hours > 0 ? leftPad(hours) + ":" + minsSecs :
+        minsSecs;
+    }
+
+    function animateEnso(time) {
+      if (paused) {
         catchPauseInterval(time);
         return;
       }
@@ -140,7 +305,11 @@
       }
       lastTime = time;
 
-      if (duration >= tailTime) {
+      if (duration <= 0) {
+        makeSound();
+        return;
+      }
+      else if (duration >= tailTime) {
         var x = 210 + Math.cos(radians) * radius,
         y = 210 + Math.sin(radians) * radius,
         transfX = x + 40,
@@ -156,12 +325,16 @@
         stop.style["stop-opacity"] = opacity;
       }
       if (shortDur == true)
-        requestAnimationFrame(animate)
+        requestAnimationFrame(animateEnso)
     }
 
     function catchPauseInterval(time) {
       pauseStartTime = time;
       wasPaused = true;
+    }
+
+    function leftPad(n) {
+      return n < 10 ? "0" + n : "" + n;
     }
 
     function makeSound() {
@@ -174,10 +347,17 @@
       wasPaused = false;
     }
 
+    function runDigital() {
+      setInterval(function() {
+        if (duration >= 0 && paused == false)
+          requestAnimationFrame(animateDigital)
+      }, 100);
+    }
+
     function runFPS(fpsInterval) {
       setInterval(function() {
-        if (duration > 0 && paused == false)
-          requestAnimationFrame(animate)
+        if (duration >= 0 && paused == false)
+          requestAnimationFrame(animateEnso)
       }, fpsInterval);
     }
 
@@ -206,21 +386,27 @@
     }
 
     function setSound() {
+      var soundKey = document.settings.sounds.value;
       var sounds = {
         "clear": "clear-bell-bowl.wav",
         "engyoji": "engyoji-bell.mp3",
         "high": "high-bell.wav",
         "low": "low-bell-bowl.wav",
-        "med": "med-singing-bowl.wav"
+        "mid": "med-singing-bowl.wav"
       }
-      sound = new Audio(sounds['engyoji']);
+      sound = new Audio(sounds[soundKey]);
     }
 
-    function startTimer() {
-      if (shortDur == false)
+    function startTimer(face) {
+      if (face == "enso") {
+        if (shortDur == false)
         runFPS(fpsInterval);
-      else
-        requestAnimationFrame(animate);
+        else
+        requestAnimationFrame(animateEnso);
+      }
+      else if (face == "digital") {
+        runDigital();
+      }
     }
   </script>
 </body>
