@@ -10,7 +10,7 @@
   <div id="choose">
     <h1 class="heading">Timer</h1>
 
-    <form id="settings" name="settings" onsubmit="event.preventDefault(); setTimer();">
+    <form id="settings" name="settings">
       <label class="center"> Hours
         <input id="hours" class="time-input" type="number" name="hours" value="" min="0" placeholder="&#8212" max="120" maxlength="3">
       </label><br>
@@ -23,50 +23,6 @@
         <input id="secs" class="time-input" type="number" name="secs" placeholder="&#8212" value="30" min="0" max="120" maxlength="3">
       </label><br>
 
-<!-- sound picker on top -->
-
-      <!-- <div id="sounds-container" class="container">
-        <label class="sound-select">
-          <div id="sounds-tile" class="tile">
-            <svg xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
-            <image x="10%" y="10%" width="80%" height="80%"
-            xlink:href="iconmonstr-bell-6.svg" />
-          </svg>
-        </div>
-        <select class="sounds" name="sounds">
-          <option value="clear">Clear Mid Bowl</option>
-          <option value="engyoji">Engyoji Temple</option>
-          <option value="high">High Bowl</option>
-          <option value="mid">Middle Bowl</option>
-          <option value="low">Low Bowl</option>
-        </select>
-      </label>
-    </div>
-
-      <div class="container">
-        <div class="tile radio-left selected">
-          <label class="radio">
-            <input id="enso-radio" type="radio" name="face" value="enso" checked="checked">
-            <svg xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
-              <image x="0" y="0" width="100%" height="100%"
-                xlink:href="no_background_enso.svg" />
-            </svg>
-          </label>
-        </div>
-
-        <div class="tile radio-right">
-          <label class="radio">
-            <input id="digital-radio" type="radio" name="face" value="digital">
-            <p>
-              30:00
-            </p>
-          </label>
-        </div>
-      </div> -->
-
-<!-- sound picker on bottom -->
       <div id="sounds-container" class="container">
         <label class="sound-select">
           <div id="sounds-tile" class="tile">
@@ -156,13 +112,16 @@
 
   <script type="text/javascript">
 
-    var choose, enso, settings, timeInputs, rect, circle, stop, radioLeft, radioRight, face="enso";
+    // Element variables
+    var choose, enso, timeInputs, rect, circle, stop, radioLeft, radioRight;
+
+    // Default timer face setting
+    var face="enso";
 
     window.onload = function () {
       body = document.querySelector("body");
 
       choose = document.querySelector("#choose");
-      settings = document.querySelector("#settings");
       timeInputs = document.querySelectorAll(".time-input");
       radioLeft = document.querySelector(".radio-left");
       radioRight = document.querySelector(".radio-right");
@@ -180,7 +139,6 @@
 
       for (var i = 0; i < timeInputs.length; i++) {
         var entry = timeInputs[i];
-        // catchArrows.bind(this, i)
         entry.addEventListener("keydown", delegateCatchArrows(i));
       }
 
@@ -204,21 +162,17 @@
         }
       }
 
-      radioLeft.onclick = function(e) {
-        e.preventDefault();
-        this.classList.add("selected");
-        radioRight.classList.remove("selected");
-        face = "enso";
-        document.querySelector("#enso-radio").checked = true;
-      };
+      radioLeft.onclick = delegateToggleRadio(radioRight, "enso");
+      radioRight.onclick = delegateToggleRadio(radioLeft, "digital");
 
-      radioRight.onclick = function(e) {
-        e.preventDefault();
-        this.classList.add("selected");
-        radioLeft.classList.remove("selected");
-        face = "digital";
-        document.querySelector("#digital-radio").checked = true;
-      };
+      function delegateToggleRadio(other, faceName) {
+        return function(e) {
+          e.preventDefault();
+          this.className += " selected";
+          other.className = other.className.replace("selected", "");
+          face = faceName;
+        }
+      }
 
       soundsTile.onclick = function(e) {
         e.preventDefault();
@@ -228,39 +182,30 @@
         else if (opacity == 0)
           soundsSelect.focus();
       };
-      // radioLeft.onclick = scopedToggleRadio(e, radioRight, "enso");
-      // radioRight.onclick = scopedToggleRadio(e, radioLeft, "digital");
-      //
-      // function scopedToggleRadio(e, other, faceName) {
-      //   return function() {
-      //     e.preventDefault();
-      //     this.className += " selected";
-      //     other.className = other.className.replace("selected", "");
-      //     face = faceName;
-      //   }
-      // }
 
-      // settings.addEventListener("submit", setTimer);
+      document.querySelector("#settings").onsubmit = setTimer;
     }
 
-
+    // Time variables
     var duration, primaryTime, tailTime, fpsInterval,
         lastTime = null, shortDur = false;
 
-    var angleIncr, radianIncr, dashIncr;
-
+    // Pause variables
     var paused = false, wasPaused = false, pauseStartTime;
 
+    // Enso animation variables
     var angle = -84, radians = (angle + 8) * (Math.PI / 180),
         angleSweep = 343.5, sweepRadians = angleSweep * (Math.PI / 180),
         dashOffset = 0, dashSweep = 1187,
+        angleIncr, radianIncr, dashIncr,
         radius = 198;
 
+    // Sound element variable
     var sound;
 
-    function setTimer() {
+    function setTimer(e) {
 
-      // e.preventDefault();
+      e.preventDefault();
       setSound();
 
       hours = Number(document.settings.hours.value);
@@ -431,19 +376,13 @@
     function setSound() {
       var soundKey = document.settings.sounds.value;
       var sounds = {
-        "clear": ["clear-bell-bowl.wav", 0],
-        "engyoji": ["engyoji-bell.mp3", 0],
-        "high": ["high-bell.wav", 0],
-        "low": ["low-bell-bowl.wav", 0],
-        "mid": ["med-singing-bowl.wav", 0] //last one not working in firefox
+        "clear": "clear-bell-bowl.wav",
+        "engyoji": "engyoji-bell.mp3",
+        "high": "high-bell.wav",
+        "low": "low-bell-bowl.wav",
+        "mid": "med-singing-bowl.wav" //last one not working in firefox
       }
-      sound = new Audio(sounds[soundKey][0]);
-      // doing sound.currentTime here causes problems in firefox, and seems
-      // not to work with event handlers....  onload, oncanplaythrough (loops,
-      // barely playing), onloadstart...
-      // sound.onload = function() {
-      //   sound.currentTime = sounds[soundKey][1];
-      // };
+      sound = new Audio(sounds[soundKey]);
     }
 
     function startTimer(face) {
