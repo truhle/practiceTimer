@@ -119,6 +119,9 @@ div.radio-left:hover, div.radio-left:active {
 
 div.radio-left.selected {
   background: white;
+  /*box-shadow: 0.5vmin 0.5vmin #666259;*/
+  /*box-shadow: 0 0 2vmin #24211c;*/
+  box-shadow: 0 0 2vmin steelblue;
 }
 
 div.radio-right {
@@ -133,6 +136,10 @@ div.radio-right:hover, div.radio-right:active {
 
 div.radio-right.selected {
   background: black;
+  /*box-shadow: 0 0 2vmin #24211c;*/
+  /*box-shadow: 0 0 2vmin #f9ab06;*/
+  box-shadow: 0 0 2vmin steelblue;
+  /*box-shadow: 0 0 3vmin lightpink;*/
 }
 
 div.radio-right  p {
@@ -153,10 +160,10 @@ div.radio-right  p {
 }
 
 h1 {
-  font-size: 4.5em;
+  font-size: 12vmin;
   text-align: center;
-  margin-bottom: 1vmin;
-  margin-top:-4vmin;
+  margin-bottom: 2vmin;
+  margin-top:-6vmin;
   padding-top: 0.5em;
   /*color: lightsteelblue;*/
   color: #4D4A44;
