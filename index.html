@@ -12,15 +12,15 @@
 
     <form id="settings" name="settings" onsubmit="event.preventDefault(); setTimer();">
       <label class="center"> Hours
-        <input id="hours" type="number" name="hours" value="" min="0" placeholder="&#8212" max="120" maxlength="3">
+        <input id="hours" class="time-input" type="number" name="hours" value="" min="0" placeholder="&#8212" max="120" maxlength="3">
       </label><br>
 
       <label class="center"> Minutes
-        <input id="mins" type="number" name="mins" placeholder="&#8212" value="" min="0" max="120" maxlength="3">
+        <input id="mins" class="time-input" type="number" name="mins" placeholder="&#8212" value="" min="0" max="120" maxlength="3">
       </label><br>
 
       <label class="center"> Seconds
-        <input id="secs" type="number" name="secs" placeholder="&#8212" value="30" min="0" max="120" maxlength="3">
+        <input id="secs" class="time-input" type="number" name="secs" placeholder="&#8212" value="30" min="0" max="120" maxlength="3">
       </label><br>
 
 <!-- sound picker on top -->
@@ -80,6 +80,7 @@
           <option value="clear">Clear Mid Bowl</option>
           <option value="engyoji">Engyoji Temple</option>
           <option value="high">High Bowl</option>
+          <!-- "Middle Bowl" not working in firefox -->
           <option value="mid">Middle Bowl</option>
           <option value="low">Low Bowl</option>
         </select>
@@ -142,6 +143,9 @@
           stroke-dashoffset: 0;" transform="rotate(-78.75,250,250)" />
       </svg>
     </g>
+    <p id="enso-time-alert">
+
+    </p>
   </div>
 
   <div id="digital">
@@ -151,15 +155,19 @@
   </div>
 
   <script type="text/javascript">
-    var choose, enso, settings, rect, circle, stop, radioLeft, radioRight, face="enso";
+
+    var choose, enso, settings, timeInputs, rect, circle, stop, radioLeft, radioRight, face="enso";
 
     window.onload = function () {
       body = document.querySelector("body");
 
       choose = document.querySelector("#choose");
       settings = document.querySelector("#settings");
+      timeInputs = document.querySelectorAll(".time-input");
       radioLeft = document.querySelector(".radio-left");
       radioRight = document.querySelector(".radio-right");
+      var soundsSelect = document.querySelector(".sounds"),
+          soundsTile = document.querySelector("#sounds-tile");
 
       enso = document.querySelector("#enso");
       digital = document.querySelector("#digital")
@@ -169,6 +177,32 @@
       rect = document.querySelector("rect");
       circle = document.querySelector("circle");
       stop = document.getElementById("opaqueStop");
+
+      for (var i = 0; i < timeInputs.length; i++) {
+        var entry = timeInputs[i];
+        // catchArrows.bind(this, i)
+        entry.addEventListener("keydown", delegateCatchArrows(i));
+      }
+
+      function delegateCatchArrows(i) {
+        return function catchArrows(e) {
+          var code = e.keyCode;
+          // catches up and down arrows to move between number fields
+          if (code == 38 || code == 40) {
+            e.preventDefault();
+            // up arrow
+            if (code == 38) {
+              var toIndex = i - 1 >= 0 ? i - 1 : 2;
+              timeInputs[toIndex].focus();
+            }
+            // down arrow
+            else {
+              var toIndex = (i + 1) % 3;
+              timeInputs[toIndex].focus();
+            }
+          }
+        }
+      }
 
       radioLeft.onclick = function(e) {
         e.preventDefault();
@@ -185,6 +219,15 @@
         face = "digital";
         document.querySelector("#digital-radio").checked = true;
       };
+
+      soundsTile.onclick = function(e) {
+        e.preventDefault();
+        var opacity = getComputedStyle(soundsSelect).opacity;
+        if (opacity == 1)
+          soundsSelect.blur();
+        else if (opacity == 0)
+          soundsSelect.focus();
+      };
       // radioLeft.onclick = scopedToggleRadio(e, radioRight, "enso");
       // radioRight.onclick = scopedToggleRadio(e, radioLeft, "digital");
       //
@@ -197,7 +240,7 @@
       //   }
       // }
 
-      settings.addEventListener("onsubmit", setTimer);
+      // settings.addEventListener("submit", setTimer);
     }
 
 
@@ -216,6 +259,7 @@
     var sound;
 
     function setTimer() {
+
       // e.preventDefault();
       setSound();
 
@@ -254,7 +298,7 @@
           }
           else {
             paused = false;
-            startTimer();
+            startTimer(face);
           }
         }
       });
@@ -279,10 +323,9 @@
         makeSound();
         return;
       }
-
       var secs = Math.floor(duration / 1000) % 60,
-          mins = Math.floor(secs / 60) % 60,
-          hours = Math.floor(hours = mins / 60),
+          mins = Math.floor(duration / 60000) % 60,
+          hours = Math.floor(duration / 3600000),
           minsSecs = leftPad(mins) + ":" + leftPad(secs);
 
       digits.innerHTML = hours > 0 ? leftPad(hours) + ":" + minsSecs :
@@ -388,25 +431,52 @@
     function setSound() {
       var soundKey = document.settings.sounds.value;
       var sounds = {
-        "clear": "clear-bell-bowl.wav",
-        "engyoji": "engyoji-bell.mp3",
-        "high": "high-bell.wav",
-        "low": "low-bell-bowl.wav",
-        "mid": "med-singing-bowl.wav"
+        "clear": ["clear-bell-bowl.wav", 0],
+        "engyoji": ["engyoji-bell.mp3", 0],
+        "high": ["high-bell.wav", 0],
+        "low": ["low-bell-bowl.wav", 0],
+        "mid": ["med-singing-bowl.wav", 0] //last one not working in firefox
       }
-      sound = new Audio(sounds[soundKey]);
+      sound = new Audio(sounds[soundKey][0]);
+      // doing sound.currentTime here causes problems in firefox, and seems
+      // not to work with event handlers....  onload, oncanplaythrough (loops,
+      // barely playing), onloadstart...
+      // sound.onload = function() {
+      //   sound.currentTime = sounds[soundKey][1];
+      // };
     }
 
     function startTimer(face) {
       if (face == "enso") {
+        var timeAlert = document.querySelector("#enso-time-alert");
+
+        timeAlert.innerHTML = pluralizeTime([[hours, "hour"], [mins, "minute"], [secs, "second"]]);
+        setTimeout( function () {
+          timeAlert.classList.add("fade");
+        }, 50);
+
         if (shortDur == false)
-        runFPS(fpsInterval);
+          runFPS(fpsInterval);
         else
-        requestAnimationFrame(animateEnso);
+          requestAnimationFrame(animateEnso);
       }
       else if (face == "digital") {
         runDigital();
       }
+    }
+
+    function pluralizeTime(units) {
+      var time = "";
+      units.forEach(function(unit) {
+        var num = unit[0], name = unit[1], numStr = num + " ";
+        if (num)
+          time += num > 1 ? numStr + name + "s, " : numStr + name + ", ";
+      });
+      time = time.slice(0, -2);
+      var lastComma = time.lastIndexOf(",");
+      if (lastComma > -1)
+        time = time.slice(0, lastComma) + time.slice(lastComma).replace(",", " and");
+      return time;
     }
   </script>
 </body>

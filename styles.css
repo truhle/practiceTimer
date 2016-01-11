@@ -122,6 +122,7 @@ div.radio-left.selected {
 }
 
 div.radio-right {
+  /*-webkit-transform: translate(0, -9.5vmin)*/
   transform: translate(0, -9.5vmin)
 }
 
@@ -254,6 +255,7 @@ select {
   background: transparent;
   outline: 0;
   margin-left: 3vmin;
+  /*-webkit-transform: translate(0, -9vmin);*/
   transform: translate(0, -9vmin);
   cursor: pointer;
   border: none;
@@ -263,6 +265,24 @@ select {
   -o-transition: all .3s ease .15s;
   -ms-transition: all .3s ease .15s;
   transition: all .3s ease .15s;
+}
+
+p#enso-time-alert {
+  position: absolute;
+  text-align: center;
+  font-size: 5vmin;
+  top: 40%;
+  left: 50%;
+  width: 50vmin;
+  opacity: 0.5;
+  /*-webkit-transform: translate(-25vmin, 0);*/
+  transform: translate(-25vmin, 0);
+  transition: opacity 3s;
+  transition-delay: 4s;
+}
+
+p#enso-time-alert.fade {
+  opacity: 0;
 }
 
 select:focus {
