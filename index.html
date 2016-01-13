@@ -117,9 +117,24 @@
   </div>
 
   <div id="digital" class="timer-face">
+    <div id="digital-pause" class="face-button digital-button fade">
+      Pause
+    </div>
     <p id="digits">
 
     </p>
+    <p id="digital-time-alert">
+
+    </p>
+    <p id="digital-click-message">
+      click anywhere to pause or cancel
+    </p>
+    <div id="digital-cancel" class="face-button digital-button fade">
+      cancel
+    </div>
+    <div id="digital-resume" class="face-button digital-button fade">
+      Resume
+    </div>
   </div>
 
   <script type="text/javascript">
@@ -257,18 +272,20 @@
 
       scrollTo(0, 0);
 
-      window.addEventListener("keydown", function(event) {
-        var code = event.keyCode;
-        if (code == "80" || code == "27") {
-          if (!paused) {
-            paused = true;
-          }
-          else {
-            paused = false;
-            startTimer(face);
-          }
-        }
-      });
+      // Early "p" and "esc" key based implementation of pause
+
+      // window.addEventListener("keydown", function(event) {
+      //   var code = event.keyCode;
+      //   if (code == "80" || code == "27") {
+      //     if (!paused) {
+      //       paused = true;
+      //     }
+      //     else {
+      //       paused = false;
+      //       startTimer(face);
+      //     }
+      //   }
+      // });
 
       startTimer(face);
     }
@@ -287,7 +304,7 @@
       lastTime = time;
 
       if (duration <= 0) {
-        makeSound();
+        endTimer();
         return;
       }
       var secs = Math.floor(duration / 1000) % 60,
@@ -316,15 +333,7 @@
       lastTime = time;
 
       if (duration <= 0) {
-        makeSound();
-        timeAlert.classList.remove("fade");
-        timeAlert.innerHTML = "session complete";
-        endMessageFade = setTimeout(function() {
-          timeAlert.classList.add("fade");
-        }, 7000);
-        removeWindowListeners();
-        removeFaceButtons();
-        window.addEventListener("click", handleCancelButton);
+        endTimer();
         return;
       }
       else if (duration >= tailTime) {
@@ -391,9 +400,27 @@
       wasPaused = true;
     }
 
-    function handleCancelButton(e) {
+    function endTimer() {
+      makeSound();
+      timeAlert.classList.remove("fade");
+      timeAlert.innerHTML = "session complete";
+      endMessageFade = setTimeout(function() {
+        timeAlert.classList.add("fade");
+      }, 7000);
+      removeWindowListeners();
+      removeFaceButtons();
+      window.addEventListener("click", handleCancelButton);
+    }
+
+    function handleCancelButton() {
       paused = true;
       removeFaceButtons();
+
+      if (face == "digital")
+        digits.innerHTML = "";
+
+      if (face == "enso")
+        resetAnimation();
 
       var faces = document.querySelectorAll(".timer-face");
       for (var i = 0; i < faces.length; i++) {
@@ -414,12 +441,6 @@
       clearTimeout(fadeOutButtons);
       timeAlert.classList.remove('fade');
       clickMessage.classList.remove('fade');
-      // timeAlert.style.opacity = 0.5;
-      // clickMessage.style.opacity = 0.5;
-      timeAlert.style.display = "none";
-      timeAlert.style.display = "block";
-      clickMessage.style.display = "none";
-      clickMessage.style.display = "block";
       window.removeEventListener("click", handleCancelButton);
       stop.style["stop-opacity"] = 1;
     }
@@ -482,16 +503,20 @@
     }
 
     function runDigital() {
-      setInterval(function() {
-        if (duration >= 0 && paused == false)
+      var run = setInterval(function() {
+        if (duration >= 0)
           requestAnimationFrame(animateDigital)
+        if (paused == true)
+          clearInterval(run);
       }, 100);
     }
 
     function runFPS(fpsInterval) {
-      setInterval(function() {
-        if (duration >= 0 && paused == false)
+      var run = setInterval(function() {
+        if (duration >= 0)
           requestAnimationFrame(animateEnso)
+        if (paused == true)
+          clearInterval(run);
       }, fpsInterval);
     }
 
@@ -555,6 +580,17 @@
           requestAnimationFrame(animateEnso);
       }
       else if (face == "digital") {
+        if (wasPaused != true) {
+          timeAlert = document.querySelector("#digital-time-alert");
+          clickMessage = document.querySelector("#digital-click-message");
+
+          timeAlert.innerHTML = pluralizeTime([[hours, "hour"], [mins, "minute"],
+          [secs, "second"]]);
+          setTimeout(function () {
+            timeAlert.classList.add("fade");
+            clickMessage.classList.add("fade");
+          }, 50);
+        }
         runDigital();
       }
     }

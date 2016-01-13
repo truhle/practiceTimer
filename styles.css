@@ -19,17 +19,73 @@ div#choose {
 
 div#digital {
   display: none;
-  min-height: 100vh;
+  height: 100vh;
   background: black;
-  /*margin: 0 auto 0 auto;*/
   position: relative;
+}
+
+div.digital-button {
+  display: inline;
+  position: absolute;
+  text-align: center;
+  font-size: 4vh;
+  width: 40vmin;
+  top: 50%;
+  left: 50%;
+  transition: opacity .5s;
+  border: solid black 1px;
+  border-radius: 3vh;
+  padding-top: 0.25vh;
+  padding-bottom: 0.25vh;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+}
+
+
+div#digital-cancel {
+  transform: translate(-20vmin, 34vh);
+  border: none;
+  font-size: 3.8vh;
+  opacity: .4;
+  color: white;
+}
+
+div#digital-cancel.fade {
+  opacity: 0;
+}
+
+div#digital-pause {
+  transform: translate(-20vmin, -40vh);
+  opacity: .8;
+  color: pink;
+  border-color: pink;
+  /*background-color: #dbddd7;*/
+}
+
+div#digital-pause.fade {
+  opacity: 0;
+}
+
+div#digital-resume {
+  transform: translate(-20vmin, -40vh);
+  /*opacity: 0.6;*/
+  color: forestgreen;
+  border-color: forestgreen;
+  display: none;
+}
+
+div#digital-resume.fade {
+  opacity: 0;
 }
 
 p#digits {
   /*display: none;*/
+  position: absolute;
   text-align: center;
   font-size: 5em;
+  /*font-size: 15vh;*/
   font-size: 25vmin;
+  width: 95vmin;
   /*color: goldenrod;*/
   color: steelblue;
   /*color: lightsteelblue;*/
@@ -47,8 +103,10 @@ p#digits {
   /*color: azure;*/
   /*color: wheat;*/
   /*background: gray;*/
-  margin-top: 25vh;
-  /*transform: translate(0, -50%);*/
+  top: 22.5%;
+  left: 50%;
+  transform: translate(-47.5vmin, 0);
+  margin: 0;
 }
 
 div#enso {
@@ -334,6 +392,47 @@ select {
   -ms-transition: all .3s ease .15s;
   transition: all .3s ease .15s;
 }
+
+p#digital-time-alert {
+  position: absolute;
+  text-align: center;
+  font-size: 5vh;
+  color: white;
+  top: 50%;
+  left: 50%;
+  width: 50vh;
+  opacity: 0.5;
+  /*-webkit-transform: translate(-25vmin, 0);*/
+  transform: translate(-25vh, -4vh);
+  transition: opacity 3s;
+  transition-delay: 4s;
+  /*background: blue;*/
+}
+
+p#digital-time-alert.fade {
+  opacity: 0;
+}
+
+p#digital-click-message {
+  position: absolute;
+  text-align: center;
+  font-size: 3.5vh;
+  color: white;
+  top: 50%;
+  left: 50%;
+  width: 50vh;
+  opacity: 0.5;
+  /*-webkit-transform: translate(-25vmin, 0);*/
+  transform: translate(-25vh, 8vh);
+  transition: opacity 3s;
+  transition-delay: 4s;
+  /*background-color: blue;*/
+}
+
+p#digital-click-message.fade {
+  opacity: 0;
+}
+
 
 p#enso-time-alert {
   position: absolute;
