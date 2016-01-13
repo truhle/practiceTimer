@@ -33,12 +33,16 @@
           </svg>
         </div>
         <select class="sounds" name="sounds">
-          <option value="clear">Clear Mid Bowl</option>
-          <option value="engyoji">Engyoji Temple</option>
+          <option value="bright">Bright Bowl</option>
+          <option value="catalpa">Catalpa Flute</option>
+          <option value="catalpaRedux">Catalpa Flute Redux</option>
+          <option value="clearG">Clear G Bowl</option>
+          <option value="engyoji">Engyoji Temple Gong</option>
           <option value="high">High Bowl</option>
-          <!-- "Middle Bowl" not working in firefox -->
-          <option value="mid">Middle Bowl</option>
-          <option value="low">Low Bowl</option>
+          <option value="low">Low Singing Bowl</option>
+          <option value="singing">Singing Bowl</option>
+          <option value="streamTingsha">Stream/Three Tingsha</option>
+          <option value="woodblocks">Wooden Fish</option>
         </select>
       </label>
     </div>
@@ -443,6 +447,8 @@
       clickMessage.classList.remove('fade');
       window.removeEventListener("click", handleCancelButton);
       stop.style["stop-opacity"] = 1;
+      sound.pause();
+      sound = null;
     }
 
     function handlePauseButton(e) {
@@ -547,13 +553,18 @@
     function setSound() {
       var soundKey = document.settings.sounds.value;
       var sounds = {
-        "clear": "clear-bell-bowl.wav",
+        "bright": "bright-bowl.mp3",
+        "catalpa": "catalpa-flute.mp3",
+        "catalpaRedux": "catalpa-flute-redux.mp3",
+        "clearG": "clear-g-bowl.mp3",
         "engyoji": "engyoji-bell.mp3",
-        "high": "high-bell.wav",
-        "low": "low-bell-bowl.wav",
-        "mid": "med-singing-bowl.wav" //last one not working in firefox
+        "high": "high-bowl.mp3",
+        "low": "low-singing-bowl.mp3",
+        "singing": "singing-bowl.mp3",
+        "streamTingsha": "stream-tingsha.mp3",
+        "woodblocks": "woodblocks.mp3"
       }
-      sound = new Audio(sounds[soundKey]);
+      sound = new Audio("./sounds/" + sounds[soundKey]);
     }
 
     function startTimer(face) {
