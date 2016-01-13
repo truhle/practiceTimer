@@ -56,6 +56,59 @@ div#enso {
   height: 100%;
 }
 
+div.enso-button {
+  display: inline;
+  position: absolute;
+  text-align: center;
+  font-size: 4vmin;
+  width: 20vmin;
+  top: 50%;
+  left: 50%;
+  transition: opacity .5s;
+  border: solid black 1px;
+  border-radius: 3vmin;
+  padding-top: 0.25vmin;
+  padding-bottom: 0.25vmin;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+}
+
+
+div#enso-cancel {
+  transform: translate(-10vmin, 18vmin);
+  border: none;
+  font-size: 3.8vmin;
+  opacity: .4;
+}
+
+div#enso-cancel.fade {
+  opacity: 0;
+}
+
+div#enso-pause {
+  transform: translate(-10vmin, -18vmin);
+  opacity: .8;
+  color: pink;
+  border-color: pink;
+  /*background-color: #dbddd7;*/
+}
+
+div#enso-pause.fade {
+  opacity: 0;
+}
+
+div#enso-resume {
+  transform: translate(-10vmin, -18vmin);
+  opacity: 0.6;
+  color: forestgreen;
+  border-color: forestgreen;
+  display: none;
+}
+
+div#enso-resume.fade {
+  opacity: 0;
+}
+
 div.clear {
   clear: both;
 }
@@ -158,6 +211,14 @@ div.radio-right  p {
   font-family: Courier, sans-serif;
   text-align: center;
 }
+
+.face-button {
+  z-index: 2;
+}
+
+/*.fade {
+  opacity: 0 !important;
+}*/
 
 h1 {
   font-size: 12vmin;
@@ -278,19 +339,40 @@ p#enso-time-alert {
   position: absolute;
   text-align: center;
   font-size: 5vmin;
-  top: 40%;
+  top: 50%;
   left: 50%;
   width: 50vmin;
   opacity: 0.5;
   /*-webkit-transform: translate(-25vmin, 0);*/
-  transform: translate(-25vmin, 0);
+  transform: translate(-25vmin, -10vmin);
   transition: opacity 3s;
   transition-delay: 4s;
+  /*background: blue;*/
 }
 
 p#enso-time-alert.fade {
   opacity: 0;
 }
+
+p#enso-click-message {
+  position: absolute;
+  text-align: center;
+  font-size: 3.5vmin;
+  top: 50%;
+  left: 50%;
+  width: 50vmin;
+  opacity: 0.5;
+  /*-webkit-transform: translate(-25vmin, 0);*/
+  transform: translate(-25vmin, 2vmin);
+  transition: opacity 3s;
+  transition-delay: 4s;
+  /*background-color: blue;*/
+}
+
+p#enso-click-message.fade {
+  opacity: 0;
+}
+
 
 select:focus {
   width: 38vmin;

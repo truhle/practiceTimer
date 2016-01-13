@@ -69,11 +69,11 @@
 
       </div>
 
-      <input class="button" type="submit" name="start" value="Start">
+      <input type="submit" name="start" value="Start">
     </form>
   </div>
 
-  <div id="enso">
+  <div id="enso" class="timer-face">
     <g style="height: 100%">
       <svg xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewbox="0 0 500 500">
@@ -97,14 +97,26 @@
         <circle cx="250" cy="250" r="198" style="stroke: white; fill: none;
           stroke-width: 65; stroke-opacity: 1; stroke-dasharray: 1218;
           stroke-dashoffset: 0;" transform="rotate(-78.75,250,250)" />
+        <p id="enso-time-alert">
+
+        </p>
+        <p id="enso-click-message">
+          click anywhere to pause or cancel
+        </p>
+        <div id="enso-pause" class="face-button enso-button fade">
+          Pause
+        </div>
+        <div id="enso-cancel" class="face-button enso-button fade">
+          cancel
+        </div>
+        <div id="enso-resume" class="face-button enso-button">
+          Resume
+        </div>
       </svg>
     </g>
-    <p id="enso-time-alert">
-
-    </p>
   </div>
 
-  <div id="digital">
+  <div id="digital" class="timer-face">
     <p id="digits">
 
     </p>
@@ -115,8 +127,8 @@
     // Element variables
     var choose, enso, timeInputs, rect, circle, stop, radioLeft, radioRight;
 
-    // Default timer face setting
-    var face="enso";
+    // Timer settings variables
+    var face="enso", hours, mins, secs;
 
     window.onload = function () {
       body = document.querySelector("body");
@@ -202,6 +214,16 @@
 
     // Sound element variable
     var sound;
+
+    // Timeout variable
+    var fadeOutButtons, endMessageFade;
+
+    function resetAnimation() {
+      angle = -84;
+      radians = (angle + 8) * (Math.PI / 180);
+      sweepRadians = angleSweep * (Math.PI / 180);
+      dashOffset = 0;
+    }
 
     function setTimer(e) {
 
@@ -295,6 +317,14 @@
 
       if (duration <= 0) {
         makeSound();
+        timeAlert.classList.remove("fade");
+        timeAlert.innerHTML = "session complete";
+        endMessageFade = setTimeout(function() {
+          timeAlert.classList.add("fade");
+        }, 7000);
+        removeWindowListeners();
+        removeFaceButtons();
+        window.addEventListener("click", handleCancelButton);
         return;
       }
       else if (duration >= tailTime) {
@@ -316,9 +346,103 @@
         requestAnimationFrame(animateEnso)
     }
 
+    function revealButtons() {
+      var selector = "." + face + "-button";
+      var buttons = document.querySelectorAll(selector);
+      for (var i = 0; i < buttons.length; i++) {
+        var el = buttons[i];
+        el.classList.remove("fade");
+        if (/pause/.test(el.id)) {
+          el.addEventListener("click", handlePauseButton);
+        }
+        else if (/cancel/.test(el.id)) {
+          el.addEventListener("click", handleCancelButton);
+        }
+        else if (/resume/.test(el.id)) {
+          el.addEventListener("click", handleResumeButton);
+        }
+      }
+      removeWindowListeners();
+
+      setButtonFadeOut(buttons);
+    }
+
+    function addWindowListeners(face) {
+      window.addEventListener("click", revealButtons);
+      window.addEventListener("keydown", revealButtons);
+    }
+
+    function removeWindowListeners() {
+      window.removeEventListener("click", revealButtons);
+      window.removeEventListener("keydown", revealButtons);
+    }
+
+    function setButtonFadeOut(buttons) {
+      fadeOutButtons = setTimeout(function() {
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].classList.add('fade');
+        }
+        addWindowListeners(face);
+      }, 8000);
+    }
+
     function catchPauseInterval(time) {
       pauseStartTime = time;
       wasPaused = true;
+    }
+
+    function handleCancelButton(e) {
+      paused = true;
+      removeFaceButtons();
+
+      var faces = document.querySelectorAll(".timer-face");
+      for (var i = 0; i < faces.length; i++) {
+        faces[i].style.display = "none";
+      }
+
+      var interval = fpsInterval ? fpsInterval + 200 : 200;
+      setTimeout(function() {
+        paused = false;
+        wasPaused = false;
+        lastTime = null;
+        resetAnimation();
+      }, interval);
+
+      body.style.background = "#FAF4E3";
+      choose.style.display = "block";
+      clearTimeout(endMessageFade);
+      clearTimeout(fadeOutButtons);
+      timeAlert.classList.remove('fade');
+      clickMessage.classList.remove('fade');
+      // timeAlert.style.opacity = 0.5;
+      // clickMessage.style.opacity = 0.5;
+      timeAlert.style.display = "none";
+      timeAlert.style.display = "block";
+      clickMessage.style.display = "none";
+      clickMessage.style.display = "block";
+      window.removeEventListener("click", handleCancelButton);
+      stop.style["stop-opacity"] = 1;
+    }
+
+    function handlePauseButton(e) {
+      clearTimeout(fadeOutButtons);
+      paused = true;
+      var pauseButton = e.target, resumeButton;
+      var pClass = pauseButton.className;
+      if (/enso/.test(pClass)) {
+        resumeButton = document.querySelector("#enso-resume");
+      }
+      else if (/digital/.test(pClass)) {
+        resumeButton = document.querySelector("#digital-resume");
+      }
+      pauseButton.style.display = "none";
+      resumeButton.style.display = "block";
+    }
+
+    function handleResumeButton() {
+      paused = false;
+      removeFaceButtons();
+      startTimer(face);
     }
 
     function leftPad(n) {
@@ -327,6 +451,28 @@
 
     function makeSound() {
       sound.play();
+    }
+
+    function removeFaceButtons() {
+      var buttons = document.querySelectorAll(".face-button");
+      for (var i = 0; i < buttons.length; i++) {
+        var el = buttons[i];
+        el.classList.add('fade');
+        if (/pause/.test(el.id)) {
+          el.removeEventListener("click", handlePauseButton);
+          el.style.display = "none";
+          el.style.display = "block";
+        }
+        else if (/cancel/.test(el.id)) {
+          el.removeEventListener("click", handleCancelButton);
+          el.style.display = "none";
+          el.style.display = "block";
+        }
+        else if (/resume/.test(el.id)) {
+          el.removeEventListener("click", handleResumeButton);
+          el.style.display = "none";
+        }
+      }
     }
 
     function resumeFromPause(time) {
@@ -386,13 +532,22 @@
     }
 
     function startTimer(face) {
-      if (face == "enso") {
-        var timeAlert = document.querySelector("#enso-time-alert");
 
-        timeAlert.innerHTML = pluralizeTime([[hours, "hour"], [mins, "minute"], [secs, "second"]]);
-        setTimeout( function () {
-          timeAlert.classList.add("fade");
-        }, 50);
+      addWindowListeners(face);
+
+      if (face == "enso") {
+        // add these to the top-level
+        if (wasPaused != true) {
+          timeAlert = document.querySelector("#enso-time-alert");
+          clickMessage = document.querySelector("#enso-click-message");
+
+          timeAlert.innerHTML = pluralizeTime([[hours, "hour"], [mins, "minute"],
+          [secs, "second"]]);
+          setTimeout(function () {
+            timeAlert.classList.add("fade");
+            clickMessage.classList.add("fade");
+          }, 50);
+        }
 
         if (shortDur == false)
           runFPS(fpsInterval);
@@ -417,6 +572,7 @@
         time = time.slice(0, lastComma) + time.slice(lastComma).replace(",", " and");
       return time;
     }
+
   </script>
 </body>
 </html>
