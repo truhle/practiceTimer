@@ -180,8 +180,8 @@ div.container {
 }
 
 div#sounds-container {
-  margin-top: -2vmin;
-  margin-bottom: 4vmin;
+  margin-top: -2vh;
+  margin-bottom: 2vh;
   height: 15vmin;
 }
 
@@ -193,7 +193,7 @@ div.tile {
   width: 20vmin;
   height: 20vmin;
   border: 1px solid #666259;
-  border-radius: 1em;
+  border-radius: 3.5vmin;
   position: relative;
   /*box-shadow: 0.05em 0.05em #666259;*/
   /*margin-left: 2em;*/
@@ -210,6 +210,7 @@ div#sounds-tile {
   width: 15vmin;
   cursor: initial;
   margin-left: 5.5vmin;
+  /*border-radius: 7.5vmin;*/
 }
 
 div#sounds-tile:hover {
@@ -221,7 +222,7 @@ label.sound-select:focus {
 }
 
 div.radio-left {
-  margin-right: 5vmin
+  margin-right: 5vmin;
 }
 
 div.radio-left:hover, div.radio-left:active {
@@ -237,7 +238,8 @@ div.radio-left.selected {
 
 div.radio-right {
   /*-webkit-transform: translate(0, -9.5vmin)*/
-  transform: translate(0, -9.5vmin)
+  margin: 0;
+  transform: translate(0, -9.5vmin);
 }
 
 
@@ -253,7 +255,7 @@ div.radio-right.selected {
   /*box-shadow: 0 0 3vmin lightpink;*/
 }
 
-div.radio-right  p {
+div.radio-right p {
   /*color: steelblue;*/
   /*color: rosybrown;*/
   color: lightsteelblue;
@@ -279,9 +281,9 @@ div.radio-right  p {
 }*/
 
 h1 {
-  font-size: 12vmin;
+  font-size: 12vh;
   text-align: center;
-  margin-bottom: 2vmin;
+  margin-bottom: 2vh;
   margin-top:-6vmin;
   padding-top: 0.5em;
   /*color: lightsteelblue;*/
@@ -291,20 +293,17 @@ h1 {
   /*text-shadow: 1px 1px;*/
 }
 
-input {
-}
-
 input[type="submit"] {
   display: block;
   background: none;
-  border-radius: 0.65em;
+  border-radius: 3.5vh;
   border-style: solid;
   outline: 0;
-  width: 6em;
-  margin: .5em auto 0 auto;
-  padding: 0.15em;
-  font-size: 2em;
-  letter-spacing: 0.07em;
+  width: 46vmin;
+  margin: 2vh auto 0 auto;
+  /*padding: 0.1em;*/
+  font-size: 6vh;
+  letter-spacing: 0.6vmin;
   /*font-family: Arial, sans-serif;*/
   color: #524F47;
 }
@@ -358,16 +357,13 @@ input#secs {
   margin-left: 0.53em;
 }
 
-label.radio {
-}
-
 label.center {
   display: block;
-  font-size: 1.5em;
+  font-size: 4vh;
   letter-spacing: 0.02em;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 2vmin;
+  margin-bottom: 2vh;
   width: 9em;
   padding-left: 2em;
   color: #666259;
