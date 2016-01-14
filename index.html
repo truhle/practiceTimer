@@ -143,14 +143,6 @@
 
   <script type="text/javascript">
 
-    // To keep the back button working after a reload from a timer:
-    // var referrer = document.referrer;
-    window.onbeforeunload = function() {
-      window.onpopstate = null;
-      // Need to test what is below when a referrer is present
-      // history.replaceState({}, "", referrer);
-    };
-
     // Element variables
     var choose, enso, timeInputs, rect, circle, stop, radioLeft, radioRight;
 
@@ -244,6 +236,10 @@
 
     // Timeout variable
     var fadeOutButtons, endMessageFade;
+
+    // Boolean to prevent excess pustState calls, pushState call tracker
+    var usedCancelButton = false, pushes;
+
 
     function resetAnimation() {
       angle = -84;
@@ -424,7 +420,11 @@
       window.addEventListener("click", handleCancelButton);
     }
 
-    function handleCancelButton() {
+    function handleCancelButton(e, backButton) {
+      console.log(typeof backButton);
+      backButton = typeof backButton !== 'undefined' ? backButton : false;
+      console.log(backButton);
+      console.log(typeof backButton);
       paused = true;
       removeFaceButtons();
 
@@ -458,7 +458,14 @@
       stop.style["stop-opacity"] = 1;
       sound.pause();
       sound = null;
-      window.onpopstate = null;
+      window.onpopstate = setUsedCancel;
+      if (backButton === false) {
+        usedCancelButton = true;
+      }
+      else {
+        usedCancelButton = false;
+        pushes--;
+      }
     }
 
     function handlePauseButton(e) {
@@ -577,10 +584,22 @@
       sound = new Audio("./sounds/" + sounds[soundKey]);
     }
 
+    function setUsedCancel() {
+      usedCancelButton = false;
+    }
+
+    function handlePopState(e) {
+      var backButton = true;
+      handleCancelButton(e, backButton);
+    }
+
     function startTimer(face) {
       if (wasPaused != true) {
-        history.pushState({}, "");
-        window.onpopstate = handleCancelButton;
+        if (usedCancelButton !== true || pushes == 0) {
+          history.pushState({}, "");
+          pushes++;
+        }
+        window.onpopstate = handlePopState;
       }
       addWindowListeners(face);
 
