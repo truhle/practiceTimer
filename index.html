@@ -39,7 +39,7 @@
           <option value="clearG">Clear G Bowl</option>
           <option value="engyoji">Engyoji Temple Gong</option>
           <option value="high">High Bowl</option>
-          <option value="low">Low Singing Bowl</option>
+          <option value="low">Low Bowl</option>
           <option value="singing">Singing Bowl</option>
           <option value="streamTingsha">Stream/Three Tingsha</option>
           <option value="woodblocks">Wooden Fish</option>
@@ -142,6 +142,14 @@
   </div>
 
   <script type="text/javascript">
+
+    // To keep the back button working after a reload from a timer:
+    // var referrer = document.referrer;
+    window.onbeforeunload = function() {
+      window.onpopstate = null;
+      // Need to test what is below when a referrer is present
+      // history.replaceState({}, "", referrer);
+    };
 
     // Element variables
     var choose, enso, timeInputs, rect, circle, stop, radioLeft, radioRight;
@@ -446,9 +454,11 @@
       timeAlert.classList.remove('fade');
       clickMessage.classList.remove('fade');
       window.removeEventListener("click", handleCancelButton);
+      removeWindowListeners();
       stop.style["stop-opacity"] = 1;
       sound.pause();
       sound = null;
+      window.onpopstate = null;
     }
 
     function handlePauseButton(e) {
@@ -568,12 +578,15 @@
     }
 
     function startTimer(face) {
-
+      if (wasPaused != true) {
+        history.pushState({}, "");
+        window.onpopstate = handleCancelButton;
+      }
       addWindowListeners(face);
 
       if (face == "enso") {
-        // add these to the top-level
         if (wasPaused != true) {
+          // Add these to the top level
           timeAlert = document.querySelector("#enso-time-alert");
           clickMessage = document.querySelector("#enso-click-message");
 
