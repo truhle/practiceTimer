@@ -252,6 +252,9 @@
 
       e.preventDefault();
       setSound();
+      // sound.load();
+      // sound.play();
+      // sound.pause();
 
       hours = Number(document.settings.hours.value);
       mins = Number(document.settings.mins.value);
@@ -320,7 +323,7 @@
           hours = Math.floor(duration / 3600000),
           minsSecs = leftPad(mins) + ":" + leftPad(secs);
 
-      digits.innerHTML = hours > 0 ? leftPad(hours) + ":" + minsSecs :
+      digits.innerHTML = hours > 0 ? hours + ":" + minsSecs :
         minsSecs;
     }
 
@@ -373,7 +376,7 @@
           el.addEventListener("click", handlePauseButton);
         }
         else if (/cancel/.test(el.id)) {
-          el.addEventListener("click", handleCancelButton);
+          el.addEventListener("click", handleInterrupt);
         }
         else if (/resume/.test(el.id)) {
           el.addEventListener("click", handleResumeButton);
@@ -400,7 +403,7 @@
           buttons[i].classList.add('fade');
         }
         addWindowListeners(face);
-      }, 8000);
+      }, 6000);
     }
 
     function catchPauseInterval(time) {
@@ -417,14 +420,11 @@
       }, 7000);
       removeWindowListeners();
       removeFaceButtons();
-      window.addEventListener("click", handleCancelButton);
+      window.addEventListener("click", handleInterrupt);
     }
 
-    function handleCancelButton(e, backButton) {
-      console.log(typeof backButton);
+    function handleInterrupt(e, backButton) {
       backButton = typeof backButton !== 'undefined' ? backButton : false;
-      console.log(backButton);
-      console.log(typeof backButton);
       paused = true;
       removeFaceButtons();
 
@@ -453,7 +453,7 @@
       clearTimeout(fadeOutButtons);
       timeAlert.classList.remove('fade');
       clickMessage.classList.remove('fade');
-      window.removeEventListener("click", handleCancelButton);
+      window.removeEventListener("click", handleInterrupt);
       removeWindowListeners();
       stop.style["stop-opacity"] = 1;
       sound.pause();
@@ -508,7 +508,7 @@
           el.style.display = "block";
         }
         else if (/cancel/.test(el.id)) {
-          el.removeEventListener("click", handleCancelButton);
+          el.removeEventListener("click", handleInterrupt);
           el.style.display = "none";
           el.style.display = "block";
         }
@@ -582,6 +582,9 @@
         "woodblocks": "woodblocks.mp3"
       }
       sound = new Audio("./sounds/" + sounds[soundKey]);
+      sound.load();
+      sound.play();
+      sound.pause();
     }
 
     function setUsedCancel() {
@@ -590,7 +593,7 @@
 
     function handlePopState(e) {
       var backButton = true;
-      handleCancelButton(e, backButton);
+      handleInterrupt(e, backButton);
     }
 
     function startTimer(face) {
@@ -605,7 +608,7 @@
 
       if (face == "enso") {
         if (wasPaused != true) {
-          // Add these to the top level
+          // Adds these to the top level
           timeAlert = document.querySelector("#enso-time-alert");
           clickMessage = document.querySelector("#enso-click-message");
 

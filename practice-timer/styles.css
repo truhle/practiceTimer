@@ -341,7 +341,7 @@ p#digital-time-alert {
   opacity: 0.5;
   transform: translate(-25vh, -4vh);
   transition: opacity 3s;
-  transition-delay: 4s;
+  transition-delay: 3s;
 }
 
 p#digital-time-alert.fade {
@@ -361,7 +361,7 @@ p#digital-click-message {
   /*setting for when want to clear multiline time message*/
   /*transform: translate(-25vh, 8vh);*/
   transition: opacity 3s;
-  transition-delay: 4s;
+  transition-delay: 3s;
 }
 
 p#digital-click-message.fade {
@@ -379,7 +379,7 @@ p#enso-time-alert {
   opacity: 0.5;
   transform: translate(-25vmin, -10vmin);
   transition: opacity 3s;
-  transition-delay: 4s;
+  transition-delay: 3s;
 }
 
 p#enso-time-alert.fade {
@@ -396,7 +396,7 @@ p#enso-click-message {
   opacity: 0.5;
   transform: translate(-25vmin, 2vmin);
   transition: opacity 3s;
-  transition-delay: 4s;
+  transition-delay: 3s;
 }
 
 p#enso-click-message.fade {
