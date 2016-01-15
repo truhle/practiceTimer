@@ -38,6 +38,7 @@ div.digital-button {
 
 div#digital-cancel {
   transform: translate(-20vmin, 34vh);
+  -ms-transform: translate(-20vh, 34vh);
   border: none;
   font-size: 3.8vh;
   opacity: .4;
@@ -50,6 +51,7 @@ div#digital-cancel.fade {
 
 div#digital-pause {
   transform: translate(-20vmin, -40vh);
+  -ms-transform: translate(-20vh, -40vh);
   opacity: .8;
   color: pink;
   border-color: pink;
@@ -61,6 +63,7 @@ div#digital-pause.fade {
 
 div#digital-resume {
   transform: translate(-20vmin, -40vh);
+  -ms-transform: translate(-20vh, -40vh);
   color: forestgreen;
   border-color: forestgreen;
   display: none;
@@ -95,6 +98,7 @@ p#digits {
   top: 22.5%;
   left: 50%;
   transform: translate(-47.5vmin, 0);
+  -ms-transform: translate(-47.5vh, 0);
   margin: 0;
 }
 
@@ -123,6 +127,7 @@ div.enso-button {
 
 div#enso-cancel {
   transform: translate(-10vmin, 18vmin);
+  -ms-transform: translate(-10vh, 18vh);
   border: none;
   font-size: 3.8vmin;
   opacity: .4;
@@ -134,6 +139,7 @@ div#enso-cancel.fade {
 
 div#enso-pause {
   transform: translate(-10vmin, -18vmin);
+  -ms-transform: translate(-10vh, -18vh);
   opacity: .8;
   color: pink;
   border-color: pink;
@@ -145,6 +151,7 @@ div#enso-pause.fade {
 
 div#enso-resume {
   transform: translate(-10vmin, -18vmin);
+  -ms-transform: translate(-10vh, -18vh);
   opacity: 0.6;
   color: forestgreen;
   border-color: forestgreen;
@@ -216,6 +223,7 @@ div.radio-left.selected {
 div.radio-right {
   margin: 0;
   transform: translate(0, -9.5vmin);
+  -ms-transform: translateY(-9.5vh);
 }
 
 
@@ -340,6 +348,7 @@ p#digital-time-alert {
   width: 50vh;
   opacity: 0.5;
   transform: translate(-25vh, -4vh);
+  -ms-transform: translate(-25vh, -4vh);
   transition: opacity 3s;
   transition-delay: 3s;
 }
@@ -358,8 +367,10 @@ p#digital-click-message {
   width: 50vh;
   opacity: 0.5;
   transform: translate(-25vh, 3vh);
+  -ms-transform: translate(-25vh, 3vh);
   /*setting for when want to clear multiline time message*/
   /*transform: translate(-25vh, 8vh);*/
+  /*-ms-transform: translate(-25vh, 8vh);*/
   transition: opacity 3s;
   transition-delay: 3s;
 }
@@ -378,6 +389,7 @@ p#enso-time-alert {
   width: 50vmin;
   opacity: 0.5;
   transform: translate(-25vmin, -10vmin);
+  -ms-transform: translate(-25vh, -10vh);
   transition: opacity 3s;
   transition-delay: 3s;
 }
@@ -395,6 +407,7 @@ p#enso-click-message {
   width: 50vmin;
   opacity: 0.5;
   transform: translate(-25vmin, 2vmin);
+  -ms-transform: translate(-25vh, 2vh);
   transition: opacity 3s;
   transition-delay: 3s;
 }
@@ -412,6 +425,7 @@ select {
   outline: 0;
   margin-left: 3vmin;
   transform: translate(0, -9vmin);
+  -ms-transform: translate(0, -9vh);
   cursor: pointer;
   border: none;
 
