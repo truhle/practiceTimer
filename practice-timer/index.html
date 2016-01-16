@@ -12,15 +12,15 @@
 
     <form id="settings" name="settings">
       <label class="center"> Hours
-        <input id="hours" class="time-input" type="number" name="hours" value="" min="0" placeholder="&#8212" max="120" maxlength="3">
+        <input id="hours" class="time-input" type="number" name="hours" value="" min="0" placeholder="&#8212;" max="120" maxlength="3">
       </label><br>
 
       <label class="center"> Minutes
-        <input id="mins" class="time-input" type="number" name="mins" placeholder="&#8212" value="" min="0" max="120" maxlength="3">
+        <input id="mins" class="time-input" type="number" name="mins" placeholder="&#8212;" value="1" min="0" max="120" maxlength="3">
       </label><br>
 
       <label class="center"> Seconds
-        <input id="secs" class="time-input" type="number" name="secs" placeholder="&#8212" value="30" min="0" max="120" maxlength="3">
+        <input id="secs" class="time-input" type="number" name="secs" placeholder="&#8212;" value="" min="0" max="120" maxlength="3">
       </label><br>
 
       <div id="sounds-container" class="container">
@@ -142,7 +142,8 @@
   </div>
 
   <script type="text/javascript">
-
+    window.onpopstate = handleChoosePop;
+    var pushes = window.state ? window.state.pushes : null;
     // Element variables
     var choose, enso, timeInputs, rect, circle, stop, radioLeft, radioRight;
 
@@ -238,7 +239,7 @@
     var fadeOutButtons, endMessageFade;
 
     // Boolean to prevent excess pustState calls, pushState call tracker
-    var usedCancelButton = false, pushes;
+    var usedCancelButton = false;
 
 
     function resetAnimation() {
@@ -252,9 +253,6 @@
 
       e.preventDefault();
       setSound();
-      // sound.load();
-      // sound.play();
-      // sound.pause();
 
       hours = Number(document.settings.hours.value);
       mins = Number(document.settings.mins.value);
@@ -424,7 +422,7 @@
     }
 
     function handleInterrupt(e, backButton) {
-      backButton = typeof backButton !== 'undefined' ? backButton : false;
+      var backButton = typeof backButton !== 'undefined' ? backButton : false;
       paused = true;
       removeFaceButtons();
 
@@ -456,15 +454,25 @@
       window.removeEventListener("click", handleInterrupt);
       removeWindowListeners();
       stop.style["stop-opacity"] = 1;
-      sound.pause();
+      if (sound)
+        sound.pause();
       sound = null;
-      window.onpopstate = setUsedCancel;
-      if (backButton === false) {
-        usedCancelButton = true;
+      if (!isNaN(pushes)) {
+        var target = backButton ? -pushes + 1 : -pushes;
+        window.onpopstate = null;
+        history.go(target);
       }
-      else {
-        usedCancelButton = false;
-        pushes--;
+      setTimeout(function() {
+        window.onpopstate = handleChoosePop;
+      }, 40);
+    }
+
+    function handleChoosePop() {
+      // var pushes = history.state.pushes;
+      console.log("choose pop");
+      if (!isNaN(pushes)) {
+        window.onpopstate = null;
+        history.go(-pushes - 1);
       }
     }
 
@@ -587,10 +595,6 @@
       sound.pause();
     }
 
-    function setUsedCancel() {
-      usedCancelButton = false;
-    }
-
     function handlePopState(e) {
       var backButton = true;
       handleInterrupt(e, backButton);
@@ -598,10 +602,8 @@
 
     function startTimer(face) {
       if (wasPaused != true) {
-        if (usedCancelButton !== true || pushes == 0) {
-          history.pushState({}, "");
-          pushes++;
-        }
+        pushes = history.state === null ? 1 : history.state.pushes + 1;
+        history.pushState({pushes: pushes}, "");
         window.onpopstate = handlePopState;
       }
       addWindowListeners(face);

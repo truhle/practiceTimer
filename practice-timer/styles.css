@@ -301,7 +301,7 @@ input::-moz-focus-inner {
 input[type="number"] {
   border-style: none;
   font-size: 1.3em;
-  width: 2.5em;
+  width: 3em;
   text-align: center;
   background: none;
   color: goldenrod;
