@@ -142,13 +142,34 @@
   </div>
 
   <script type="text/javascript">
-    window.onpopstate = handleChoosePop;
-    var pushes = window.state ? window.state.pushes : null;
     // Element variables
     var choose, enso, timeInputs, rect, circle, stop, radioLeft, radioRight;
 
     // Timer settings variables
     var face="enso", hours, mins, secs;
+
+    // Time variables
+    var duration, primaryTime, tailTime, fpsInterval,
+    lastTime = null, shortDur = false;
+
+    // Pause variables
+    var paused = false, wasPaused = false, pauseStartTime;
+
+    // Enso animation variables
+    var angle = -84, radians = (angle + 8) * (Math.PI / 180),
+    angleSweep = 343.5, sweepRadians = angleSweep * (Math.PI / 180),
+    dashOffset = 0, dashSweep = 1187,
+    angleIncr, radianIncr, dashIncr,
+    radius = 198;
+
+    // Sound element variable
+    var sound;
+
+    // Timeout variables
+    var fadeOutButtons, endMessageFade;
+
+    // Browser navigation-- handles back button after page reload
+    window.onpopstate = handleChoosePop;
 
     window.onload = function () {
       body = document.querySelector("body");
@@ -217,30 +238,6 @@
 
       document.querySelector("#settings").onsubmit = setTimer;
     }
-
-    // Time variables
-    var duration, primaryTime, tailTime, fpsInterval,
-        lastTime = null, shortDur = false;
-
-    // Pause variables
-    var paused = false, wasPaused = false, pauseStartTime;
-
-    // Enso animation variables
-    var angle = -84, radians = (angle + 8) * (Math.PI / 180),
-        angleSweep = 343.5, sweepRadians = angleSweep * (Math.PI / 180),
-        dashOffset = 0, dashSweep = 1187,
-        angleIncr, radianIncr, dashIncr,
-        radius = 198;
-
-    // Sound element variable
-    var sound;
-
-    // Timeout variable
-    var fadeOutButtons, endMessageFade;
-
-    // Boolean to prevent excess pustState calls, pushState call tracker
-    var usedCancelButton = false;
-
 
     function resetAnimation() {
       angle = -84;
@@ -397,9 +394,7 @@
 
     function setButtonFadeOut(buttons) {
       fadeOutButtons = setTimeout(function() {
-        for (var i = 0; i < buttons.length; i++) {
-          buttons[i].classList.add('fade');
-        }
+        removeFaceButtons();
         addWindowListeners(face);
       }, 6000);
     }
@@ -457,10 +452,9 @@
       if (sound)
         sound.pause();
       sound = null;
-      if (!isNaN(pushes)) {
-        var target = backButton ? -pushes + 1 : -pushes;
+      if (!backButton) {
         window.onpopstate = null;
-        history.go(target);
+        history.go(-1);
       }
       setTimeout(function() {
         window.onpopstate = handleChoosePop;
@@ -468,12 +462,7 @@
     }
 
     function handleChoosePop() {
-      // var pushes = history.state.pushes;
-      console.log("choose pop");
-      if (!isNaN(pushes)) {
-        window.onpopstate = null;
-        history.go(-pushes - 1);
-      }
+      history.go(-1);
     }
 
     function handlePauseButton(e) {
@@ -492,9 +481,12 @@
     }
 
     function handleResumeButton() {
+      clearTimeout(fadeOutButtons);
       paused = false;
       removeFaceButtons();
-      startTimer(face);
+      setTimeout(function() {
+        startTimer(face);
+      }, 25);
     }
 
     function leftPad(n) {
@@ -512,19 +504,22 @@
         el.classList.add('fade');
         if (/pause/.test(el.id)) {
           el.removeEventListener("click", handlePauseButton);
-          el.style.display = "none";
           el.style.display = "block";
         }
         else if (/cancel/.test(el.id)) {
           el.removeEventListener("click", handleInterrupt);
-          el.style.display = "none";
-          el.style.display = "block";
         }
         else if (/resume/.test(el.id)) {
           el.removeEventListener("click", handleResumeButton);
-          el.style.display = "none";
+          scopeDisplayTimeout(el, 600);
         }
       }
+    }
+
+    function scopeDisplayTimeout(el, interval) {
+      setTimeout(function () {
+        el.style.display = "none";
+      }, interval)
     }
 
     function resumeFromPause(time) {
@@ -590,6 +585,7 @@
         "woodblocks": "woodblocks.mp3"
       }
       sound = new Audio("./sounds/" + sounds[soundKey]);
+      // Prep end sound to be triggered by script in mobile browsers
       sound.load();
       sound.play();
       sound.pause();
@@ -602,8 +598,10 @@
 
     function startTimer(face) {
       if (wasPaused != true) {
-        pushes = history.state === null ? 1 : history.state.pushes + 1;
-        history.pushState({pushes: pushes}, "");
+        if (history.state === null)
+          history.pushState({}, "");
+        else
+          history.replaceState({}, "");
         window.onpopstate = handlePopState;
       }
       addWindowListeners(face);
