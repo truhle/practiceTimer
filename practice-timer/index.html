@@ -192,10 +192,10 @@
 
       for (var i = 0; i < timeInputs.length; i++) {
         var entry = timeInputs[i];
-        entry.addEventListener("keydown", delegateCatchArrows(i));
+        entry.addEventListener("keydown", scopeCatchArrows(i));
       }
 
-      function delegateCatchArrows(i) {
+      function scopeCatchArrows(i) {
         return function catchArrows(e) {
           var code = e.keyCode;
           // catches up and down arrows to move between number fields
@@ -215,10 +215,10 @@
         }
       }
 
-      radioLeft.onclick = delegateToggleRadio(radioRight, "enso");
-      radioRight.onclick = delegateToggleRadio(radioLeft, "digital");
+      radioLeft.onclick = scopeToggleRadio(radioRight, "enso");
+      radioRight.onclick = scopeToggleRadio(radioLeft, "digital");
 
-      function delegateToggleRadio(other, faceName) {
+      function scopeToggleRadio(other, faceName) {
         return function(e) {
           e.preventDefault();
           this.className += " selected";
@@ -371,7 +371,7 @@
           el.addEventListener("click", handlePauseButton);
         }
         else if (/cancel/.test(el.id)) {
-          el.addEventListener("click", handleInterrupt);
+          el.addEventListener("click", revertToChoose);
         }
         else if (/resume/.test(el.id)) {
           el.addEventListener("click", handleResumeButton);
@@ -413,11 +413,10 @@
       }, 7000);
       removeWindowListeners();
       removeFaceButtons();
-      window.addEventListener("click", handleInterrupt);
+      window.addEventListener("click", revertToChoose);
     }
 
-    function handleInterrupt(e, backButton) {
-      var backButton = typeof backButton !== 'undefined' ? backButton : false;
+    function revertToChoose(e, backButton) {
       paused = true;
       removeFaceButtons();
 
@@ -437,16 +436,15 @@
         paused = false;
         wasPaused = false;
         lastTime = null;
-        resetAnimation();
       }, interval);
 
-      body.style.background = "#FAF4E3";
-      choose.style.display = "block";
       clearTimeout(endMessageFade);
       clearTimeout(fadeOutButtons);
+      body.style.background = "#FAF4E3";
+      choose.style.display = "block";
       timeAlert.classList.remove('fade');
       clickMessage.classList.remove('fade');
-      window.removeEventListener("click", handleInterrupt);
+      window.removeEventListener("click", revertToChoose);
       removeWindowListeners();
       stop.style["stop-opacity"] = 1;
       if (sound)
@@ -454,7 +452,7 @@
       sound = null;
       if (!backButton) {
         window.onpopstate = null;
-        history.go(-1);
+        window.location("/")
       }
       setTimeout(function() {
         window.onpopstate = handleChoosePop;
@@ -462,14 +460,15 @@
     }
 
     function handleChoosePop() {
-      history.go(-1);
+      // history.back();
     }
 
     function handlePauseButton(e) {
       clearTimeout(fadeOutButtons);
       paused = true;
-      var pauseButton = e.target, resumeButton;
-      var pClass = pauseButton.className;
+      var pauseButton = e.target,
+          resumeButton,
+          pClass = pauseButton.className;
       if (/enso/.test(pClass)) {
         resumeButton = document.querySelector("#enso-resume");
       }
@@ -507,16 +506,16 @@
           el.style.display = "block";
         }
         else if (/cancel/.test(el.id)) {
-          el.removeEventListener("click", handleInterrupt);
+          el.removeEventListener("click", revertToChoose);
         }
         else if (/resume/.test(el.id)) {
           el.removeEventListener("click", handleResumeButton);
-          scopeDisplayTimeout(el, 600);
+          scopeButtonDisplayTimeout(el, 600);
         }
       }
     }
 
-    function scopeDisplayTimeout(el, interval) {
+    function scopeButtonDisplayTimeout(el, interval) {
       setTimeout(function () {
         el.style.display = "none";
       }, interval)
@@ -593,7 +592,7 @@
 
     function handlePopState(e) {
       var backButton = true;
-      handleInterrupt(e, backButton);
+      revertToChoose(e, backButton);
     }
 
     function startTimer(face) {
