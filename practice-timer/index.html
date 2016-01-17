@@ -143,24 +143,28 @@
 
   <script type="text/javascript">
     // Element variables
-    var choose, enso, timeInputs, rect, circle, stop, radioLeft, radioRight;
+    var body,
+        choose, timeInputs, radioLeft, radioRight,
+        enso, rect, circle, stop,
+        digital, digits,
+        timeAlert, clickMessage;
 
     // Timer settings variables
     var face="enso", hours, mins, secs;
 
     // Time variables
     var duration, primaryTime, tailTime, fpsInterval,
-    lastTime = null, shortDur = false;
+        lastTime = null, shortDur = false;
 
     // Pause variables
-    var paused = false, wasPaused = false, pauseStartTime;
+    var paused = false, pauseStartTime, wasPaused = false;
 
     // Enso animation variables
     var angle = -84, radians = (angle + 8) * (Math.PI / 180),
-    angleSweep = 343.5, sweepRadians = angleSweep * (Math.PI / 180),
-    dashOffset = 0, dashSweep = 1187,
-    angleIncr, radianIncr, dashIncr,
-    radius = 198;
+        angleSweep = 343.5, sweepRadians = angleSweep * (Math.PI / 180),
+        dashOffset = 0, dashSweep = 1187,
+        angleIncr, radianIncr, dashIncr,
+        radius = 198;
 
     // Sound element variable
     var sound;
@@ -168,8 +172,8 @@
     // Timeout variables
     var fadeOutButtons, endMessageFade;
 
-    // Browser navigation-- handles back button after page reload
-    window.onpopstate = handleChoosePop;
+    // Reset pop state handler in case of page reload
+    window.onpopstate = null;
 
     window.onload = function () {
       body = document.querySelector("body");
@@ -178,18 +182,19 @@
       timeInputs = document.querySelectorAll(".time-input");
       radioLeft = document.querySelector(".radio-left");
       radioRight = document.querySelector(".radio-right");
-      var soundsSelect = document.querySelector(".sounds"),
-          soundsTile = document.querySelector("#sounds-tile");
 
       enso = document.querySelector("#enso");
-      digital = document.querySelector("#digital")
-      digits = document.querySelector("#digits");
-
-
       rect = document.querySelector("rect");
       circle = document.querySelector("circle");
       stop = document.getElementById("opaqueStop");
 
+      digital = document.querySelector("#digital")
+      digits = document.querySelector("#digits");
+
+      setChooseScreenHandlers();
+    }
+
+    function setChooseScreenHandlers() {
       for (var i = 0; i < timeInputs.length; i++) {
         var entry = timeInputs[i];
         entry.addEventListener("keydown", scopeCatchArrows(i));
@@ -227,6 +232,9 @@
         }
       }
 
+      var soundsSelect = document.querySelector(".sounds"),
+          soundsTile = document.querySelector("#sounds-tile");
+
       soundsTile.onclick = function(e) {
         e.preventDefault();
         var opacity = getComputedStyle(soundsSelect).opacity;
@@ -239,22 +247,14 @@
       document.querySelector("#settings").onsubmit = setTimer;
     }
 
-    function resetAnimation() {
-      angle = -84;
-      radians = (angle + 8) * (Math.PI / 180);
-      sweepRadians = angleSweep * (Math.PI / 180);
-      dashOffset = 0;
-    }
-
     function setTimer(e) {
-
       e.preventDefault();
+
       setSound();
 
       hours = Number(document.settings.hours.value);
       mins = Number(document.settings.mins.value);
       secs = Number(document.settings.secs.value);
-
       duration = ((hours * 3600) + (mins * 60) + secs) * 1000;
 
       choose.style.display = "none";
@@ -266,7 +266,7 @@
         radianIncr = sweepRadians / primaryTime,
         dashIncr = dashSweep / primaryTime;
 
-        setFPS(duration);
+        setFPS();
 
         body.style.background = "white";
         enso.style.display = "block";
@@ -278,274 +278,51 @@
 
       scrollTo(0, 0);
 
-      // Early "p" and "esc" key based implementation of pause
-
-      // window.addEventListener("keydown", function(event) {
-      //   var code = event.keyCode;
-      //   if (code == "80" || code == "27") {
-      //     if (!paused) {
-      //       paused = true;
-      //     }
-      //     else {
-      //       paused = false;
-      //       startTimer(face);
-      //     }
-      //   }
-      // });
-
-      startTimer(face);
+      startTimer();
     }
 
-    function animateDigital(time) {
-      if (paused) {
-        catchPauseInterval(time);
-        return;
+    function startTimer() {
+      // Make possible to use back button to navigate back from a timer face
+      if (wasPaused != true) {
+        if (history.state === null)
+          history.pushState({}, "");
+        else
+          history.replaceState({}, "");
+        window.onpopstate = handlePopState;
       }
-      else if (lastTime != null) {
-        if (wasPaused)
-          resumeFromPause(time);
-        elapsed = time - lastTime;
-        duration -= elapsed;
-      }
-      lastTime = time;
+      addWindowListeners();
 
-      if (duration <= 0) {
-        endTimer();
-        return;
-      }
-      var secs = Math.floor(duration / 1000) % 60,
-          mins = Math.floor(duration / 60000) % 60,
-          hours = Math.floor(duration / 3600000),
-          minsSecs = leftPad(mins) + ":" + leftPad(secs);
-
-      digits.innerHTML = hours > 0 ? hours + ":" + minsSecs :
-        minsSecs;
-    }
-
-    function animateEnso(time) {
-      if (paused) {
-        catchPauseInterval(time);
-        return;
-      }
-      else if (lastTime != null) {
-        if (wasPaused)
-          resumeFromPause(time);
-        elapsed = time - lastTime;
-        angle -= angleIncr * elapsed;
-        radians -= radianIncr * elapsed;
-        dashOffset += dashIncr * elapsed;
-        duration -= elapsed;
-      }
-      lastTime = time;
-
-      if (duration <= 0) {
-        endTimer();
-        return;
-      }
-      else if (duration >= tailTime) {
-        var x = 210 + Math.cos(radians) * radius,
-        y = 210 + Math.sin(radians) * radius,
-        transfX = x + 40,
-        transfY = y + 40,
-        transform = "rotate(" + angle + "," + transfX + "," + transfY + ")";
-        rect.setAttribute("x", x);
-        rect.setAttribute("y", y);
-        rect.setAttribute("transform", transform);
-        circle.style['stroke-dashoffset'] = dashOffset;
-      }
-      else if (duration < tailTime) {
-        var opacity = duration / tailTime;
-        stop.style["stop-opacity"] = opacity;
-      }
-      if (shortDur == true)
-        requestAnimationFrame(animateEnso)
-    }
-
-    function revealButtons() {
-      var selector = "." + face + "-button";
-      var buttons = document.querySelectorAll(selector);
-      for (var i = 0; i < buttons.length; i++) {
-        var el = buttons[i];
-        el.classList.remove("fade");
-        if (/pause/.test(el.id)) {
-          el.addEventListener("click", handlePauseButton);
+      if (face == "enso") {
+        if (!wasPaused) {
+          timeAlert = document.querySelector("#enso-time-alert");
+          clickMessage = document.querySelector("#enso-click-message");
+          timeAlert.innerHTML = pluralizeTime([[hours, "hour"], [mins, "minute"],
+          [secs, "second"]]);
+          setMessageFadeOut();
         }
-        else if (/cancel/.test(el.id)) {
-          el.addEventListener("click", revertToChoose);
+        if (shortDur == false)
+          runFPS(fpsInterval);
+        else
+          requestAnimationFrame(animateEnso);
+      }
+      else if (face == "digital") {
+        if (!wasPaused) {
+          timeAlert = document.querySelector("#digital-time-alert");
+          clickMessage = document.querySelector("#digital-click-message");
+          setMessageFadeOut();
         }
-        else if (/resume/.test(el.id)) {
-          el.addEventListener("click", handleResumeButton);
-        }
-      }
-      removeWindowListeners();
-
-      setButtonFadeOut(buttons);
-    }
-
-    function addWindowListeners(face) {
-      window.addEventListener("click", revealButtons);
-      window.addEventListener("keydown", revealButtons);
-    }
-
-    function removeWindowListeners() {
-      window.removeEventListener("click", revealButtons);
-      window.removeEventListener("keydown", revealButtons);
-    }
-
-    function setButtonFadeOut(buttons) {
-      fadeOutButtons = setTimeout(function() {
-        removeFaceButtons();
-        addWindowListeners(face);
-      }, 6000);
-    }
-
-    function catchPauseInterval(time) {
-      pauseStartTime = time;
-      wasPaused = true;
-    }
-
-    function endTimer() {
-      makeSound();
-      timeAlert.classList.remove("fade");
-      timeAlert.innerHTML = "session complete";
-      endMessageFade = setTimeout(function() {
-        timeAlert.classList.add("fade");
-      }, 7000);
-      removeWindowListeners();
-      removeFaceButtons();
-      window.addEventListener("click", revertToChoose);
-    }
-
-    function revertToChoose(e, backButton) {
-      paused = true;
-      removeFaceButtons();
-
-      if (face == "digital")
-        digits.innerHTML = "";
-
-      if (face == "enso")
-        resetAnimation();
-
-      var faces = document.querySelectorAll(".timer-face");
-      for (var i = 0; i < faces.length; i++) {
-        faces[i].style.display = "none";
+        runDigital();
       }
 
-      var interval = fpsInterval ? fpsInterval + 200 : 200;
-      setTimeout(function() {
-        paused = false;
-        wasPaused = false;
-        lastTime = null;
-      }, interval);
-
-      clearTimeout(endMessageFade);
-      clearTimeout(fadeOutButtons);
-      body.style.background = "#FAF4E3";
-      choose.style.display = "block";
-      timeAlert.classList.remove('fade');
-      clickMessage.classList.remove('fade');
-      window.removeEventListener("click", revertToChoose);
-      removeWindowListeners();
-      stop.style["stop-opacity"] = 1;
-      if (sound)
-        sound.pause();
-      sound = null;
-      if (!backButton) {
-        window.onpopstate = null;
-        window.location("/")
-      }
-      setTimeout(function() {
-        window.onpopstate = handleChoosePop;
-      }, 40);
-    }
-
-    function handleChoosePop() {
-      // history.back();
-    }
-
-    function handlePauseButton(e) {
-      clearTimeout(fadeOutButtons);
-      paused = true;
-      var pauseButton = e.target,
-          resumeButton,
-          pClass = pauseButton.className;
-      if (/enso/.test(pClass)) {
-        resumeButton = document.querySelector("#enso-resume");
-      }
-      else if (/digital/.test(pClass)) {
-        resumeButton = document.querySelector("#digital-resume");
-      }
-      pauseButton.style.display = "none";
-      resumeButton.style.display = "block";
-    }
-
-    function handleResumeButton() {
-      clearTimeout(fadeOutButtons);
-      paused = false;
-      removeFaceButtons();
-      setTimeout(function() {
-        startTimer(face);
-      }, 25);
-    }
-
-    function leftPad(n) {
-      return n < 10 ? "0" + n : "" + n;
-    }
-
-    function makeSound() {
-      sound.play();
-    }
-
-    function removeFaceButtons() {
-      var buttons = document.querySelectorAll(".face-button");
-      for (var i = 0; i < buttons.length; i++) {
-        var el = buttons[i];
-        el.classList.add('fade');
-        if (/pause/.test(el.id)) {
-          el.removeEventListener("click", handlePauseButton);
-          el.style.display = "block";
-        }
-        else if (/cancel/.test(el.id)) {
-          el.removeEventListener("click", revertToChoose);
-        }
-        else if (/resume/.test(el.id)) {
-          el.removeEventListener("click", handleResumeButton);
-          scopeButtonDisplayTimeout(el, 600);
-        }
+      function setMessageFadeOut() {
+        setTimeout(function () {
+          timeAlert.classList.add("fade");
+          clickMessage.classList.add("fade");
+        }, 50);
       }
     }
 
-    function scopeButtonDisplayTimeout(el, interval) {
-      setTimeout(function () {
-        el.style.display = "none";
-      }, interval)
-    }
-
-    function resumeFromPause(time) {
-      var pauseInterval = time - pauseStartTime;
-      lastTime += pauseInterval;
-      wasPaused = false;
-    }
-
-    function runDigital() {
-      var run = setInterval(function() {
-        if (duration >= 0)
-          requestAnimationFrame(animateDigital)
-        if (paused == true)
-          clearInterval(run);
-      }, 100);
-    }
-
-    function runFPS(fpsInterval) {
-      var run = setInterval(function() {
-        if (duration >= 0)
-          requestAnimationFrame(animateEnso)
-        if (paused == true)
-          clearInterval(run);
-      }, fpsInterval);
-    }
-
-    function setFPS(duration) {
+    function setFPS() {
       var secs = duration / 1000, mins = secs / 60, fps;
       if (secs < 120) {
         shortDur = true;
@@ -584,73 +361,283 @@
         "woodblocks": "woodblocks.mp3"
       }
       sound = new Audio("./sounds/" + sounds[soundKey]);
+
       // Prep end sound to be triggered by script in mobile browsers
       sound.load();
       sound.play();
       sound.pause();
     }
 
-    function handlePopState(e) {
-      var backButton = true;
-      revertToChoose(e, backButton);
+    function runDigital() {
+      var run = setInterval(function() {
+        if (duration > -2000)
+          requestAnimationFrame(animateDigital)
+        if (paused == true)
+          clearInterval(run);
+      }, 100);
     }
 
-    function startTimer(face) {
-      if (wasPaused != true) {
-        if (history.state === null)
-          history.pushState({}, "");
-        else
-          history.replaceState({}, "");
-        window.onpopstate = handlePopState;
+    function runFPS(fpsInterval) {
+      var run = setInterval(function() {
+        if (duration > -2000)
+          requestAnimationFrame(animateEnso)
+        if (paused == true)
+          clearInterval(run);
+      }, fpsInterval);
+    }
+
+    function animateDigital(time) {
+      if (paused) {
+        catchPauseInterval(time);
+        return;
       }
-      addWindowListeners(face);
+      else if (lastTime != null) {
+        if (wasPaused)
+          resumeFromPause(time);
+        elapsed = time - lastTime;
+        duration -= elapsed;
+      }
+      lastTime = time;
 
-      if (face == "enso") {
-        if (wasPaused != true) {
-          // Adds these to the top level
-          timeAlert = document.querySelector("#enso-time-alert");
-          clickMessage = document.querySelector("#enso-click-message");
+      if (duration <= 0) {
+        endTimer();
+        return;
+      }
 
-          timeAlert.innerHTML = pluralizeTime([[hours, "hour"], [mins, "minute"],
-          [secs, "second"]]);
-          setTimeout(function () {
-            timeAlert.classList.add("fade");
-            clickMessage.classList.add("fade");
-          }, 50);
+      var secs = Math.floor(duration / 1000) % 60,
+          mins = Math.floor(duration / 60000) % 60,
+          hours = Math.floor(duration / 3600000),
+          minsSecs = leftPad(mins) + ":" + leftPad(secs);
+
+      digits.innerHTML = hours > 0 ? hours + ":" + minsSecs :
+        minsSecs;
+    }
+
+    function animateEnso(time) {
+      if (paused) {
+        catchPauseInterval(time);
+        return;
+      }
+      else if (lastTime != null) {
+        if (wasPaused)
+          resumeFromPause(time);
+        elapsed = time - lastTime;
+        angle -= angleIncr * elapsed;
+        radians -= radianIncr * elapsed;
+        dashOffset += dashIncr * elapsed;
+        duration -= elapsed;
+      }
+      lastTime = time;
+
+      if (duration <= 0) {
+        endTimer();
+        return;
+      }
+      else if (duration >= tailTime) {
+        var x = 210 + Math.cos(radians) * radius,
+            y = 210 + Math.sin(radians) * radius,
+            transfX = x + 40,
+            transfY = y + 40,
+            transform = "rotate(" + angle + "," + transfX + "," + transfY + ")";
+
+        rect.setAttribute("x", x);
+        rect.setAttribute("y", y);
+        rect.setAttribute("transform", transform);
+        circle.style['stroke-dashoffset'] = dashOffset;
+      }
+      else if (duration < tailTime) {
+        var opacity = duration / tailTime;
+        stop.style["stop-opacity"] = opacity;
+      }
+      if (shortDur == true)
+        requestAnimationFrame(animateEnso)
+    }
+
+    function catchPauseInterval(time) {
+      pauseStartTime = time;
+      wasPaused = true;
+    }
+
+    function resumeFromPause(time) {
+      var pauseInterval = time - pauseStartTime;
+      lastTime += pauseInterval;
+      wasPaused = false;
+    }
+
+    function endTimer() {
+      paused = true;
+      sound.play();
+      timeAlert.classList.remove("fade");
+      timeAlert.innerHTML = "session complete";
+      endMessageFade = setTimeout(function() {
+        timeAlert.classList.add("fade");
+      }, 7000);
+      removeWindowListeners();
+      removeFaceButtons();
+      window.addEventListener("click", revertToChoose);
+    }
+
+    function addWindowListeners() {
+      window.addEventListener("click", revealFaceButtons);
+      window.addEventListener("keydown", revealFaceButtons);
+    }
+
+    function removeWindowListeners() {
+      window.removeEventListener("click", revealFaceButtons);
+      window.removeEventListener("keydown", revealFaceButtons);
+    }
+
+    function removeFaceButtons() {
+      var buttons = document.querySelectorAll(".face-button");
+
+      for (var i = 0; i < buttons.length; i++) {
+        var el = buttons[i];
+        el.classList.add('fade');
+        if (/pause/.test(el.id)) {
+          el.removeEventListener("click", handlePauseButton);
+          el.style.display = "block";
         }
-
-        if (shortDur == false)
-          runFPS(fpsInterval);
-        else
-          requestAnimationFrame(animateEnso);
-      }
-      else if (face == "digital") {
-        if (wasPaused != true) {
-          timeAlert = document.querySelector("#digital-time-alert");
-          clickMessage = document.querySelector("#digital-click-message");
-
-          // timeAlert.innerHTML = pluralizeTime([[hours, "hour"], [mins, "minute"],
-          // [secs, "second"]]);
-          setTimeout(function () {
-            timeAlert.classList.add("fade");
-            clickMessage.classList.add("fade");
-          }, 50);
+        else if (/cancel/.test(el.id)) {
+          el.removeEventListener("click", revertToChoose);
         }
-        runDigital();
+        else if (/resume/.test(el.id)) {
+          el.removeEventListener("click", handleResumeButton);
+          scopeButtonDisplayTimeout(el, 600);
+        }
       }
+
+      function scopeButtonDisplayTimeout(el, interval) {
+        setTimeout(function () {
+          el.style.display = "none";
+        }, interval)
+      }
+    }
+
+    function revealFaceButtons() {
+      var selector = "." + face + "-button";
+      var buttons = document.querySelectorAll(selector);
+
+      for (var i = 0; i < buttons.length; i++) {
+        var el = buttons[i];
+        el.classList.remove("fade");
+        if (/pause/.test(el.id)) {
+          el.addEventListener("click", handlePauseButton);
+        }
+        else if (/cancel/.test(el.id)) {
+          el.addEventListener("click", revertToChoose);
+        }
+        else if (/resume/.test(el.id)) {
+          el.addEventListener("click", handleResumeButton);
+        }
+      }
+      removeWindowListeners();
+
+      fadeOutButtons = setTimeout(function() {
+        removeFaceButtons();
+        addWindowListeners();
+      }, 6000);
+    }
+
+    function handlePauseButton(e) {
+      clearTimeout(fadeOutButtons);
+      paused = true;
+
+      var pauseButton = e.target,
+          resumeButton,
+          pClass = pauseButton.className;
+
+      if (/enso/.test(pClass)) {
+        resumeButton = document.querySelector("#enso-resume");
+      }
+      else if (/digital/.test(pClass)) {
+        resumeButton = document.querySelector("#digital-resume");
+      }
+
+      pauseButton.style.display = "none";
+      resumeButton.style.display = "block";
+    }
+
+    function handlePopState() {
+      revertToChoose();
+    }
+
+    function handleResumeButton() {
+      clearTimeout(fadeOutButtons);
+      paused = false;
+      removeFaceButtons();
+      setTimeout(function() {
+        startTimer(face);
+      }, 25);
+    }
+
+    function revertToChoose() {
+      paused = true;
+
+      if (face == "digital")
+        digits.innerHTML = "";
+
+      if (face == "enso")
+        resetAnimation();
+
+      var faces = document.querySelectorAll(".timer-face");
+      for (var i = 0; i < faces.length; i++) {
+        faces[i].style.display = "none";
+      }
+
+      var interval = fpsInterval ? fpsInterval + 200 : 200;
+      setTimeout(function() {
+        paused = false;
+        wasPaused = false;
+        lastTime = null;
+      }, interval);
+
+      clearTimeout(endMessageFade);
+      clearTimeout(fadeOutButtons);
+
+      window.removeEventListener("click", revertToChoose);
+      removeWindowListeners();
+
+      removeFaceButtons();
+      timeAlert.classList.remove('fade');
+      clickMessage.classList.remove('fade');
+
+      body.style.background = "#FAF4E3";
+      choose.style.display = "block";
+
+      if (sound)
+        sound.pause();
+      sound = null;
+
+      window.onpopstate = null;
+    }
+
+    function resetAnimation() {
+      angle = -84;
+      radians = (angle + 8) * (Math.PI / 180);
+      dashOffset = 0;
+      stop.style["stop-opacity"] = 1;
+    }
+
+    function leftPad(n) {
+      return n < 10 ? "0" + n : "" + n;
     }
 
     function pluralizeTime(units) {
       var time = "";
+
       units.forEach(function(unit) {
         var num = unit[0], name = unit[1], numStr = num + " ";
         if (num)
           time += num > 1 ? numStr + name + "s, " : numStr + name + ", ";
       });
+
       time = time.slice(0, -2);
+
       var lastComma = time.lastIndexOf(",");
+
       if (lastComma > -1)
         time = time.slice(0, lastComma) + time.slice(lastComma).replace(",", " and");
+
       return time;
     }
 
