@@ -226,8 +226,8 @@
       function scopeToggleRadio(other, faceName) {
         return function(e) {
           e.preventDefault();
-          this.className += " selected";
-          other.className = other.className.replace("selected", "");
+          this.classList.add("selected");
+          other.classList.remove("selected");
           face = faceName;
         }
       }
