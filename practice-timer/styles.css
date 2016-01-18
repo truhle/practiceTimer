@@ -73,35 +73,6 @@ div#digital-resume.fade {
   opacity: 0;
 }
 
-p#digits {
-  position: absolute;
-  text-align: center;
-  font-size: 5em;
-  font-size: 25vmin;
-  width: 95vmin;
-  color: steelblue;
-  /*color: goldenrod;*/
-  /*color: lightsteelblue;*/
-  /*color: rosybrown;*/
-  /*color: lightpink;*/
-  /*color: lavender;*/
-  /*color: gainsboro;*/
-  /*color: darkgray;*/
-  /*color: darkgoldenrod;*/
-  /*color: darkcyan;*/
-  /*color: cornsilk;*/
-  /*color: cornflowerblue;*/
-  /*color: burlywood;*/
-  /*color: blanchedalmond;*/
-  /*color: azure;*/
-  /*color: wheat;*/
-  top: 22.5%;
-  left: 50%;
-  transform: translate(-47.5vmin, 0);
-  -ms-transform: translate(-47.5vh, 0);
-  margin: 0;
-}
-
 div#enso {
   display: none;
   height: 100%;
@@ -123,7 +94,6 @@ div.enso-button {
   font-family: Arial, sans-serif;
   cursor: pointer;
 }
-
 
 div#enso-cancel {
   transform: translate(-10vmin, 18vmin);
@@ -172,41 +142,6 @@ div.container {
   height: 20vmin;
 }
 
-div#sounds-container {
-  margin-top: -2vh;
-  margin-bottom: 2vh;
-  height: 15vmin;
-}
-
-div.tile {
-  background: #FAF4E3;
-  display: inline-block;
-  width: 20vmin;
-  height: 20vmin;
-  border: 1px solid #666259;
-  border-radius: 3.5vmin;
-  position: relative;
-}
-
-div.tile:hover, div.tile > *:hover{
-  cursor: pointer;
-}
-
-div#sounds-tile {
-  height: 15vmin;
-  width: 15vmin;
-  cursor: initial;
-  margin-left: 5.5vmin;
-}
-
-div#sounds-tile:hover {
-  background: #E3D2A3;
-}
-
-label.sound-select:focus {
-  background: #E3D2A3;
-}
-
 div.radio-left {
   margin-right: 5vmin;
 }
@@ -253,6 +188,41 @@ div.radio-right p {
   text-align: center;
 }
 
+div#sounds-container {
+  margin-top: -2vh;
+  margin-bottom: 2vh;
+  height: 15vmin;
+}
+
+div#sounds-tile {
+  height: 15vmin;
+  width: 15vmin;
+  cursor: initial;
+  margin-left: 5.5vmin;
+}
+
+div#sounds-tile:hover {
+  background: #E3D2A3;
+}
+
+label.sound-select:focus {
+  background: #E3D2A3;
+}
+
+div.tile {
+  background: #FAF4E3;
+  display: inline-block;
+  width: 20vmin;
+  height: 20vmin;
+  border: 1px solid #666259;
+  border-radius: 3.5vmin;
+  position: relative;
+}
+
+div.tile:hover, div.tile > *:hover{
+  cursor: pointer;
+}
+
 .face-button {
   z-index: 2;
 }
@@ -262,10 +232,31 @@ h1 {
   text-align: center;
   margin-bottom: 2vh;
   margin-top:-6vmin;
-  padding-top: 0.5em;
+  padding-top: 4vmin;
   color: #4D4A44;
   font-weight: 500;
   letter-spacing: 3vmin;
+}
+
+input {
+  padding: 0;
+  margin: 0;
+}
+
+input[type="number"] {
+  border-style: none;
+  font-size: 1.3em;
+  width: 3em;
+  text-align: center;
+  background: none;
+  color: goldenrod;
+  /*color: olivedrab;*/
+  /*color: steelblue;*/
+  outline: 0;
+}
+
+input[type="radio"] {
+  display: none;
 }
 
 input[type="submit"] {
@@ -294,26 +285,6 @@ input[type="submit"]:active {
   background: #BFAD7C;
 }
 
-input::-moz-focus-inner {
-  border: 0;
-}
-
-input[type="number"] {
-  border-style: none;
-  font-size: 1.3em;
-  width: 3em;
-  text-align: center;
-  background: none;
-  color: goldenrod;
-  /*color: olivedrab;*/
-  /*color: steelblue;*/
-  outline: 0;
-}
-
-input[type="radio"] {
-  display: none;
-}
-
 input#hours {
   margin-left: 1.25em;
 }
@@ -326,13 +297,22 @@ input#secs {
   margin-left: 0.53em;
 }
 
+input::-moz-focus-inner {
+  border: 0;
+}
+
+label {
+  padding: 0;
+  margin: 0;
+}
+
 label.center {
   display: block;
   font-size: 4vh;
   letter-spacing: 0.02em;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 2vh;
+  margin-bottom: 7vh;
   width: 9em;
   padding-left: 2em;
   color: #666259;
@@ -379,6 +359,34 @@ p#digital-click-message.fade {
   opacity: 0;
 }
 
+p#digits {
+  position: absolute;
+  text-align: center;
+  font-size: 5em;
+  font-size: 25vmin;
+  width: 95vmin;
+  color: steelblue;
+  /*color: goldenrod;*/
+  /*color: lightsteelblue;*/
+  /*color: rosybrown;*/
+  /*color: lightpink;*/
+  /*color: lavender;*/
+  /*color: gainsboro;*/
+  /*color: darkgray;*/
+  /*color: darkgoldenrod;*/
+  /*color: darkcyan;*/
+  /*color: cornsilk;*/
+  /*color: cornflowerblue;*/
+  /*color: burlywood;*/
+  /*color: blanchedalmond;*/
+  /*color: azure;*/
+  /*color: wheat;*/
+  top: 22.5%;
+  left: 50%;
+  transform: translate(-47.5vmin, 0);
+  -ms-transform: translate(-47.5vh, 0);
+  margin: 0;
+}
 
 p#enso-time-alert {
   position: absolute;
