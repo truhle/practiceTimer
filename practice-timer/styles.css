@@ -37,9 +37,9 @@ div.digital-button {
 
 
 div#digital-cancel {
-  transform: translate(-20vmin, 34vh);
-  -webkit-transform: translate(-20vmin, 34vh);
-  -ms-transform: translate(-20vh, 34vh);
+  transform: translate(-20vmin, 30vh);
+  -webkit-transform: translate(-20vmin, 30vh);
+  -ms-transform: translate(-20vh, 30vh);
   border: none;
   font-size: 3.8vh;
   opacity: .4;
@@ -253,7 +253,7 @@ input {
 input[type="number"] {
   border-style: none;
   font-size: 1.3em;
-  width: 3em;
+  width: 2.6em;
   text-align: center;
   background: none;
   color: goldenrod;

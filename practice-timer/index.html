@@ -474,7 +474,7 @@
       }, 7000);
       removeWindowListeners();
       removeFaceButtons();
-      window.addEventListener("click", revertToChoose);
+      addElementListeners(window, revertToChoose);
     }
 
     function addWindowListeners() {
@@ -489,6 +489,16 @@
       window.removeEventListener("touchstart", revealFaceButtons);
     }
 
+    function addElementListeners(element, func) {
+      element.addEventListener("click", func);
+      element.addEventListener("touchstart", func);
+    }
+
+    function removeElementListeners(element, func) {
+      element.removeEventListener("click", func);
+      element.removeEventListener("touchstart", func);
+    }
+
     function removeFaceButtons() {
       var buttons = document.querySelectorAll(".face-button");
 
@@ -496,14 +506,14 @@
         var el = buttons[i];
         el.classList.add('fade');
         if (/pause/.test(el.id)) {
-          el.removeEventListener("click", handlePauseButton);
+          removeElementListeners(el, handlePauseButton);
           el.style.display = "block";
         }
         else if (/cancel/.test(el.id)) {
-          el.removeEventListener("click", revertToChoose);
+          removeElementListeners(el, revertToChoose);
         }
         else if (/resume/.test(el.id)) {
-          el.removeEventListener("click", handleResumeButton);
+          removeElementListeners(el, handleResumeButton);
           scopeButtonDisplayTimeout(el, 600);
         }
       }
@@ -524,13 +534,13 @@
         var el = buttons[i];
         el.classList.remove("fade");
         if (/pause/.test(el.id)) {
-          el.addEventListener("click", handlePauseButton);
+          addElementListeners(el, handlePauseButton);
         }
         else if (/cancel/.test(el.id)) {
-          el.addEventListener("click", revertToChoose);
+          addElementListeners(el, revertToChoose);
         }
         else if (/resume/.test(el.id)) {
-          el.addEventListener("click", handleResumeButton);
+          addElementListeners(el, handleResumeButton);
         }
       }
       removeWindowListeners();
@@ -542,6 +552,7 @@
     }
 
     function handlePauseButton(e) {
+      e.preventDefault();
       clearTimeout(fadeOutButtons);
       paused = true;
 
@@ -560,11 +571,12 @@
       resumeButton.style.display = "block";
     }
 
-    function handlePopState() {
-      revertToChoose();
+    function handlePopState(e) {
+      revertToChoose(e);
     }
 
-    function handleResumeButton() {
+    function handleResumeButton(e) {
+      e.preventDefault();
       clearTimeout(fadeOutButtons);
       paused = false;
       removeFaceButtons();
@@ -573,7 +585,8 @@
       }, 25);
     }
 
-    function revertToChoose() {
+    function revertToChoose(e) {
+      e.preventDefault();
       paused = true;
 
       if (face == "digital")
@@ -597,7 +610,7 @@
       clearTimeout(endMessageFade);
       clearTimeout(fadeOutButtons);
 
-      window.removeEventListener("click", revertToChoose);
+      removeElementListeners(window, revertToChoose);
       removeWindowListeners();
 
       removeFaceButtons();
