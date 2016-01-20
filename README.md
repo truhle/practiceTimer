@@ -8,8 +8,8 @@ countdown.  Pure Javascript, HTML/XML and CSS.
 When animating the enso timer face, it automatically adjusts framerate for longer sessions to reduce
 power consumption.  
 
-Adjusts to mobile Android and iPhone(iOS 9) screens, though it does not work in the native Android browser.
-Use mobile Chrome, Firefox or Opera (though not Opera mini)..
+Adjusts to mobile Android and iPhone (iOS 8+) screens, though it does not work in the native Android browser.
+Use mobile Chrome, Firefox or Opera (alas not Opera Mini)..
 
 It cannot keep a screen on if it screen is set to sleep after a certain time.  You can adjust your
 sleep settings, or you can use a tool, such as:
