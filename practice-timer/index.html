@@ -480,11 +480,13 @@
     function addWindowListeners() {
       window.addEventListener("click", revealFaceButtons);
       window.addEventListener("keydown", revealFaceButtons);
+      window.addEventListener("touchstart", revealFaceButtons);
     }
 
     function removeWindowListeners() {
       window.removeEventListener("click", revealFaceButtons);
       window.removeEventListener("keydown", revealFaceButtons);
+      window.removeEventLIstener("touchstart", revealFaceButtons);
     }
 
     function removeFaceButtons() {
@@ -513,7 +515,8 @@
       }
     }
 
-    function revealFaceButtons() {
+    function revealFaceButtons(e) {
+      e.preventDefault();
       var selector = "." + face + "-button";
       var buttons = document.querySelectorAll(selector);
 
