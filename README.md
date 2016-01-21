@@ -12,8 +12,8 @@ Adjusts to mobile Android and iPhone (iOS 8+) screens, though it does not work
 in the native Android browser. Use mobile Chrome, Firefox or Opera (alas not
 Opera Mini)..
 
-It cannot keep a screen that is set to sleep after a certain time awake.  
-You can adjust your sleep settings, or you can use a tool, such as:
+It cannot keep a screen that is set to sleep after a certain time awake. You can
+adjust your sleep settings, or you can use a tool, such as:
 
 For Mac: [Caffeine](http://lightheadsw.com/caffeine/)
 
