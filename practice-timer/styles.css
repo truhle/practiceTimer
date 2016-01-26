@@ -238,8 +238,8 @@ h1 {
   font-size: 12vh;
   text-align: center;
   margin-bottom: 2vh;
-  margin-top:-6vmin;
-  padding-top: 4vmin;
+  margin-top:1vh;
+  /*padding-top: 4vmin;*/
   color: #4D4A44;
   font-weight: 500;
   letter-spacing: 3vmin;
@@ -319,7 +319,7 @@ label.center {
   letter-spacing: 0.02em;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 7vh;
+  margin-bottom: 4.8vh;
   width: 9em;
   padding-left: 2em;
   color: #666259;
