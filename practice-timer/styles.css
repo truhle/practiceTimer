@@ -146,6 +146,12 @@ div.container {
   text-align: center;
   width: 100%;
   height: 20vmin;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
 }
 
 div.radio-left {
@@ -163,9 +169,6 @@ div.radio-left.selected {
 
 div.radio-right {
   margin: 0;
-  transform: translate(0, -9.5vmin);
-  -webkit-transform: translate(0, -9.5vmin);
-  -ms-transform: translateY(-9.5vh);
 }
 
 
@@ -179,6 +182,7 @@ div.radio-right.selected {
 }
 
 div.radio-right p {
+  vertical-align: middle;
   color: lightsteelblue;
   /*color: steelblue;*/
   /*color: rosybrown;*/
@@ -192,7 +196,6 @@ div.radio-right p {
   margin-top: 7vmin;
   font-size: 4vmin;
   font-family: Courier, sans-serif;
-  text-align: center;
 }
 
 div#sounds-container {
