@@ -147,10 +147,10 @@ div.container {
   width: 100%;
   height: 20vmin;
   display: -webkit-flex;
-  display: -ms-flex;
+  display: -ms-flexbox;
   display: flex;
   -webkit-justify-content: center;
-  -ms-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
 }
 
