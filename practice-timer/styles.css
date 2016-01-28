@@ -98,7 +98,7 @@ div.enso-button {
 }
 
 div#enso-cancel {
-  top: 16vmin;
+  top: 17vmin;
   border: none;
   font-size: 3.8vmin;
   opacity: .4;
@@ -109,7 +109,7 @@ div#enso-cancel.fade {
 }
 
 div#enso-pause {
-  top: -20vmin;
+  top: -21vmin;
   opacity: .8;
   color: pink;
   border-color: pink;
@@ -120,7 +120,7 @@ div#enso-pause.fade {
 }
 
 div#enso-resume {
-  top: -20vmin;
+  top: -21vmin;
   opacity: 0.6;
   color: forestgreen;
   border-color: forestgreen;
