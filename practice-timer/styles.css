@@ -401,17 +401,49 @@ p#digits {
   margin: 0;
 }
 
+div.messages-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+div#enso-messages {
+  position: relative;
+  text-align: center;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
 p#enso-time-alert {
-  position: absolute;
+  /*position: absolute;*/
   text-align: center;
   font-size: 5vmin;
-  top: 50%;
+  width: 50vmin;
+  padding: 0;
+  margin: 0;
+  margin-top: 3.5vmin;
+  opacity: 0.5;
+  /*top: 50%;
   left: 50%;
   width: 50vmin;
-  opacity: 0.5;
   transform: translate(-25vmin, -10vmin);
   -webkit-transform: translate(-25vmin, -10vmin);
-  -ms-transform: translate(-25vh, -10vh);
+  -ms-transform: translate(-25vh, -10vh);*/
   transition: opacity 3s;
   transition-delay: 3s;
 }
@@ -421,16 +453,19 @@ p#enso-time-alert.fade {
 }
 
 p#enso-click-message {
-  position: absolute;
+  /*position: absolute;*/
   text-align: center;
   font-size: 3.5vmin;
-  top: 50%;
-  left: 50%;
   width: 50vmin;
   opacity: 0.5;
+  margin: 0;
+  margin-top: 4vmin;
+  /*top: 50%;
+  left: 50%;
+  width: 50vmin;
   transform: translate(-25vmin, 2vmin);
   -webkit-transform: translate(-25vmin, 2vmin);
-  -ms-transform: translate(-25vh, 2vh);
+  -ms-transform: translate(-25vh, 2vh);*/
   transition: opacity 3s;
   transition-delay: 3s;
 }
