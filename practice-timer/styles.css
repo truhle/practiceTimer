@@ -23,7 +23,7 @@ div.digital-button {
   position: absolute;
   text-align: center;
   font-size: 4vh;
-  width: 40vmin;
+  width: 40vh;
   top: 50%;
   left: 50%;
   transition: opacity .5s;
@@ -37,9 +37,9 @@ div.digital-button {
 
 
 div#digital-cancel {
-  transform: translate(-20vmin, 30vh);
-  -webkit-transform: translate(-20vmin, 30vh);
-  -ms-transform: translate(-20vh, 30vh);
+  transform: translate(-20vh, 27vh);
+  -webkit-transform: translate(-20vh, 27vh);
+  -ms-transform: translate(-20vh, 27vh);
   border: none;
   font-size: 3.8vh;
   opacity: .4;
@@ -51,8 +51,8 @@ div#digital-cancel.fade {
 }
 
 div#digital-pause {
-  transform: translate(-20vmin, -40vh);
-  -webkit-transform: translate(-20vmin, -40vh);
+  transform: translate(-20vh, -40vh);
+  -webkit-transform: translate(-20vh, -40vh);
   -ms-transform: translate(-20vh, -40vh);
   opacity: .8;
   color: pink;
@@ -64,8 +64,8 @@ div#digital-pause.fade {
 }
 
 div#digital-resume {
-  transform: translate(-20vmin, -40vh);
-  -webkit-transform: translate(-20vmin, -40vh);
+  transform: translate(-20vh, -40vh);
+  -webkit-transform: translate(-20vh, -40vh);
   -ms-transform: translate(-20vh, -40vh);
   color: forestgreen;
   border-color: forestgreen;
