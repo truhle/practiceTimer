@@ -415,7 +415,7 @@ div.messages-container {
   justify-content: center;
 }
 
-div#enso-messages {
+div.messages-inner-container {
   position: relative;
   text-align: center;
   display: -webkit-flex;

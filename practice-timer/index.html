@@ -103,7 +103,7 @@
           stroke-dashoffset: 0;" transform="rotate(-78.75,250,250)" />
       </svg>
       <div class="messages-container">
-        <div id="enso-messages" class="face-messages">
+        <div class="messages-inner-container">
           <p id="enso-time-alert">
 
           </p>
@@ -618,6 +618,7 @@
       removeWindowListeners();
 
       removeFaceButtons();
+      timeAlert.innerHTML = "";
       timeAlert.classList.remove('fade');
       clickMessage.classList.remove('fade');
 
