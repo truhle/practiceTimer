@@ -186,9 +186,11 @@ div.radio-right p {
   /*color: darkcyan;*/
   /*color: cornflowerblue;*/
   /*color: burlywood;*/
-  margin-top: 7vmin;
+  /*margin-top: 7vmin;*/
+  line-height: 11vmin;
+  /*height: 10vmin;*/
   font-size: 4vmin;
-  font-family: Courier, sans-serif;
+  font-family: Courier, monospace;
 }
 
 div#sounds-container {
