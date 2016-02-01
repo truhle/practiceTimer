@@ -19,13 +19,11 @@ div#digital {
 }
 
 div.digital-button {
-  display: inline;
+  display: inline-block;
   position: absolute;
   text-align: center;
   font-size: 4vh;
   width: 40vh;
-  top: 50%;
-  left: 50%;
   transition: opacity .5s;
   border: solid black 1px;
   border-radius: 3vh;
@@ -37,9 +35,8 @@ div.digital-button {
 
 
 div#digital-cancel {
-  transform: translate(-20vh, 27vh);
-  -webkit-transform: translate(-20vh, 27vh);
-  -ms-transform: translate(-20vh, 27vh);
+  top: 27vh;
+  left: -20vh;
   border: none;
   font-size: 3.8vh;
   opacity: .4;
@@ -51,9 +48,8 @@ div#digital-cancel.fade {
 }
 
 div#digital-pause {
-  transform: translate(-20vh, -40vh);
-  -webkit-transform: translate(-20vh, -40vh);
-  -ms-transform: translate(-20vh, -40vh);
+  top: -40vh;
+  left: -20vh;
   opacity: .8;
   color: pink;
   border-color: pink;
@@ -64,9 +60,8 @@ div#digital-pause.fade {
 }
 
 div#digital-resume {
-  transform: translate(-20vh, -40vh);
-  -webkit-transform: translate(-20vh, -40vh);
-  -ms-transform: translate(-20vh, -40vh);
+  top: -40vh;
+  left: -20vh;
   color: forestgreen;
   border-color: forestgreen;
   display: none;
@@ -323,17 +318,12 @@ label.center {
 }
 
 p#digital-time-alert {
-  position: absolute;
   text-align: center;
   font-size: 5vh;
   color: white;
-  top: 50%;
-  left: 50%;
+  margin-top: 24vmin;
   width: 50vh;
   opacity: 0.5;
-  transform: translate(-25vh, -4vh);
-  -webkit-transform: translate(-25vh, -4vh);
-  -ms-transform: translate(-25vh, -4vh);
   transition: opacity 3s;
   transition-delay: 3s;
 }
@@ -343,20 +333,12 @@ p#digital-time-alert.fade {
 }
 
 p#digital-click-message {
-  position: absolute;
   text-align: center;
   font-size: 3.5vh;
   color: white;
-  top: 50%;
-  left: 50%;
+  margin-top: -2vmin;
   width: 50vh;
   opacity: 0.5;
-  transform: translate(-25vh, 3vh);
-  -webkit-transform: translate(-25vh, 3vh);
-  -ms-transform: translate(-25vh, 3vh);
-  /*setting for when want to clear multiline time message*/
-  /*transform: translate(-25vh, 8vh);*/
-  /*-ms-transform: translate(-25vh, 8vh);*/
   transition: opacity 3s;
   transition-delay: 3s;
 }
@@ -403,10 +385,6 @@ div.center-marker {
   display: inline-block;
   width: 1px;
   height: 1px;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 
 div.face-container {
