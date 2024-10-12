@@ -1,682 +1,794 @@
 <!DOCTYPE html>
 <html lang="en" style="height: 100%">
-<head>
-  <meta charset="UTF-8">
-  <title>Practice Timer</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Practice Timer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-<body>
-  <div id="choose">
-    <h1 class="heading">Timer</h1>
+  <body>
+    <div id="choose">
+      <h1 class="heading">Timer</h1>
 
-    <form id="settings" name="settings">
-      <label class="center"> Hours
-        <input id="hours" class="time-input" type="number" name="hours" value="" min="0" placeholder="&#8212;" max="120" maxlength="3">
-      </label>
-
-      <label class="center"> Minutes
-        <input id="mins" class="time-input" type="number" name="mins" placeholder="&#8212;" value="2" min="0" max="120" maxlength="3">
-      </label>
-
-      <label class="center"> Seconds
-        <input id="secs" class="time-input" type="number" name="secs" placeholder="&#8212;" value="" min="0" max="120" maxlength="3">
-      </label>
-
-      <div id="sounds-container" class="container">
-        <label class="sound-select">
-          <div id="sounds-tile" class="tile">
-            <svg xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
-              <image x="10%" y="10%" width="80%" height="80%"
-                xlink:href="iconmonstr-sound-wave-1.svg" />
-            </svg>
-          </div>
-          <select class="sounds" name="sounds">
-            <option value="bright">Bright Bowl</option>
-            <option value="catalpa">Catalpa Flute</option>
-            <option value="catalpaRedux">Catalpa Flute Redux</option>
-            <option value="clearG">Clear G Bowl</option>
-            <option value="engyoji">Engyoji Temple Gong</option>
-            <option value="high">High Bowl</option>
-            <option value="low">Low Bowl</option>
-            <option value="singing">Singing Bowl</option>
-            <option value="streamTingsha">Stream/Three Tingsha</option>
-            <option value="woodblocks">Wooden Fish</option>
-          </select>
+      <form id="settings" name="settings">
+        <label class="center">
+          Hours
+          <input
+            id="hours"
+            class="time-input"
+            type="number"
+            name="hours"
+            value=""
+            min="0"
+            placeholder="&#8212;"
+            max="120"
+            maxlength="3"
+          />
         </label>
-      </div>
 
-      <div class="container">
-        <div class="tile radio-left selected">
-          <label class="radio">
-            <input id="enso-radio" type="radio" name="face" value="enso" checked="checked">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
-              <image x="0" y="0" width="100%" height="100%"
-                xlink:href="no_background_enso.svg" />
-            </svg>
+        <label class="center">
+          Minutes
+          <input
+            id="mins"
+            class="time-input"
+            type="number"
+            name="mins"
+            placeholder="&#8212;"
+            value=""
+            min="0"
+            max="120"
+            maxlength="3"
+          />
+        </label>
+
+        <label class="center">
+          Seconds
+          <input
+            id="secs"
+            class="time-input"
+            type="number"
+            name="secs"
+            placeholder="&#8212;"
+            value=""
+            min="0"
+            max="120"
+            maxlength="3"
+          />
+        </label>
+
+        <div id="sounds-container" class="container">
+          <label class="sound-select">
+            <div id="sounds-tile" class="tile">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                width="100%"
+                height="100%"
+              >
+                <image
+                  x="10%"
+                  y="10%"
+                  width="80%"
+                  height="80%"
+                  xlink:href="iconmonstr-sound-wave-1.svg"
+                />
+              </svg>
+            </div>
+            <select class="sounds" name="sounds">
+              <option value="bright">Bright Bowl</option>
+              <option value="catalpa">Catalpa Flute</option>
+              <option value="catalpaRedux">Catalpa Flute Redux</option>
+              <option value="clearG">Clear G Bowl</option>
+              <option value="engyoji">Engyoji Temple Gong</option>
+              <option value="high">High Bowl</option>
+              <option value="low">Low Bowl</option>
+              <option value="singing">Singing Bowl</option>
+              <option value="streamTingsha">Stream/Three Tingsha</option>
+              <option value="woodblocks">Wooden Fish</option>
+            </select>
           </label>
         </div>
 
-        <div class="tile radio-right">
-          <label class="radio">
-            <input id="digital-radio" type="radio" name="face" value="digital">
-            <p>
-              digital
-            </p>
-          </label>
-        </div>
-      </div>
+        <div class="container">
+          <div class="tile radio-enso">
+            <label class="radio">
+              <input id="enso-radio" type="radio" name="face" value="enso" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                width="100%"
+                height="100%"
+              >
+                <image
+                  x="0"
+                  y="0"
+                  width="100%"
+                  height="100%"
+                  xlink:href="no_background_enso.svg"
+                />
+              </svg>
+            </label>
+          </div>
 
-      <div class="clear"></div>
-
-      <input type="submit" name="start" value="Start">
-    </form>
-  </div>
-
-  <div id="enso" class="timer-face">
-    <svg xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%"
-      viewbox="0 0 500 500">
-      <defs>
-        <radialGradient id="round" cx="50%" cy="300%" fx="40%" fy="80%"
-          r="295%" spreadMethod="pad">
-          <stop offset="0%" style="stop-color:white; stop-opacity:0" />
-          <stop id="opaqueStop" offset="100%"
-            style="stop-color:white; stop-opacity:1" />
-        </radialGradient>
-      </defs>
-
-      <image x="0" y="0" width="100%" height="100%"
-        xlink:href="enso.svg" />
-
-      <rect x="257.9" y="17.88" width="80" height="80" fill="url(#round)"
-        style="stroke: none;"
-        transform="rotate(-84, 297.9, 57.88)" />
-
-      <!-- circle diameter: 1244 -->
-      <circle cx="250" cy="250" r="198" style="stroke: white; fill: none;
-        stroke-width: 65; stroke-opacity: 1; stroke-dasharray: 1218;
-        stroke-dashoffset: 0;" transform="rotate(-78.75,250,250)" />
-    </svg>
-
-    <div class="face-container">
-      <div class="face-inner-container">
-        <p id="enso-time-alert">
-
-        </p>
-        <div class="abs-center">
-          <div class="center-marker">
-            <div id="enso-pause" class="face-button enso-button fade">
-              Pause
-            </div>
-            <div id="enso-cancel" class="face-button enso-button fade">
-              cancel
-            </div>
-            <div id="enso-resume" class="face-button enso-button">
-              Resume
-            </div>
+          <div class="tile radio-digital">
+            <label class="radio">
+              <input
+                id="digital-radio"
+                type="radio"
+                name="face"
+                value="digital"
+              />
+              <p>digital</p>
+            </label>
           </div>
         </div>
-        <p id="enso-click-message">
-          click anywhere to pause or cancel
-        </p>
 
-      </div>
+        <div class="clear"></div>
+
+        <input type="submit" name="start" value="Start" />
+      </form>
     </div>
-  </div>
 
-  <div id="digital" class="timer-face">
+    <div id="enso" class="timer-face">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        width="100%"
+        height="100%"
+        viewbox="0 0 500 500"
+      >
+        <defs>
+          <radialGradient
+            id="round"
+            cx="50%"
+            cy="300%"
+            fx="40%"
+            fy="80%"
+            r="295%"
+            spreadMethod="pad"
+          >
+            <stop offset="0%" style="stop-color: white; stop-opacity: 0" />
+            <stop
+              id="opaqueStop"
+              offset="100%"
+              style="stop-color: white; stop-opacity: 1"
+            />
+          </radialGradient>
+        </defs>
 
-    <div class="face-container">
-      <div class="face-inner-container">
-        <div class="abs-center">
-          <div class="center-marker">
-            <div id="digital-pause" class="face-button digital-button fade">
-              Pause
-            </div>
-            <div id="digital-resume" class="face-button digital-button fade">
-              Resume
-            </div>
-            <p id="digits">
+        <image x="0" y="0" width="100%" height="100%" xlink:href="enso.svg" />
 
-            </p>
-            <div id="digital-cancel" class="face-button digital-button fade">
-              cancel
+        <rect
+          x="257.9"
+          y="17.88"
+          width="80"
+          height="80"
+          fill="url(#round)"
+          style="stroke: none"
+          transform="rotate(-84, 297.9, 57.88)"
+        />
+
+        <!-- circle diameter: 1244 -->
+        <circle
+          cx="250"
+          cy="250"
+          r="198"
+          style="
+            stroke: white;
+            fill: none;
+            stroke-width: 65;
+            stroke-opacity: 1;
+            stroke-dasharray: 1218;
+            stroke-dashoffset: 0;
+          "
+          transform="rotate(-78.75,250,250)"
+        />
+      </svg>
+
+      <div class="face-container">
+        <div class="face-inner-container">
+          <p id="enso-time-alert"></p>
+          <div class="abs-center">
+            <div class="center-marker">
+              <div id="enso-pause" class="face-button enso-button fade">
+                Pause
+              </div>
+              <div id="enso-cancel" class="face-button enso-button fade">
+                cancel
+              </div>
+              <div id="enso-resume" class="face-button enso-button">Resume</div>
             </div>
           </div>
+          <p id="enso-click-message">click anywhere to pause or cancel</p>
         </div>
-        <p id="digital-time-alert">
-
-        </p>
-        <p id="digital-click-message">
-          click anywhere to pause or cancel
-        </p>
       </div>
     </div>
 
+    <div id="digital" class="timer-face">
+      <div class="face-container">
+        <div class="face-inner-container">
+          <div class="abs-center">
+            <div class="center-marker">
+              <div id="digital-pause" class="face-button digital-button fade">
+                Pause
+              </div>
+              <div id="digital-resume" class="face-button digital-button fade">
+                Resume
+              </div>
+              <p id="digits"></p>
+              <div id="digital-cancel" class="face-button digital-button fade">
+                cancel
+              </div>
+            </div>
+          </div>
+          <p id="digital-time-alert"></p>
+          <p id="digital-click-message">click anywhere to pause or cancel</p>
+        </div>
+      </div>
+    </div>
 
+    <script type="text/javascript">
+      // Element variables
+      var body,
+        choose,
+        timeInputs,
+        radioEnso,
+        radioDigital,
+        enso,
+        rect,
+        circle,
+        stop,
+        digital,
+        digits,
+        timeAlert,
+        clickMessage;
 
-  </div>
+      // Timer settings variables
+      var faceLSKey = "pt-face";
+      var localStorageFace = localStorage.getItem(faceLSKey);
+      var face = localStorageFace ? localStorageFace : "enso",
+        hours,
+        mins,
+        secs;
 
-  <script type="text/javascript">
-    // Element variables
-    var body,
-        choose, timeInputs, radioLeft, radioRight,
-        enso, rect, circle, stop,
-        digital, digits,
-        timeAlert, clickMessage;
+      // Time variables
+      var hoursLSKey = "pt-hours",
+        minsLSKey = "pt-mins",
+        secsLSKey = "pt-secs";
+      var localStorageHours = localStorage.getItem(hoursLSKey);
+      var localStorageMins = localStorage.getItem(minsLSKey);
+      var localStorageSecs = localStorage.getItem(secsLSKey);
+      var duration,
+        primaryTime,
+        tailTime,
+        fpsInterval,
+        lastTime = null,
+        shortDur = false,
+        startingTimerValues = {
+          mins: localStorageMins
+            ? localStorageMins
+            : localStorageHours || localStorageSecs
+            ? ""
+            : "2",
+          hours: localStorageHours ? localStorageHours : "",
+          secs: localStorageSecs ? localStorageSecs : "",
+        };
 
-    // Timer settings variables
-    var face="enso", hours, mins, secs;
+      // Pause variables
+      var paused = false,
+        pauseStartTime,
+        wasPaused = false;
 
-    // Time variables
-    var duration, primaryTime, tailTime, fpsInterval,
-        lastTime = null, shortDur = false;
-
-    // Pause variables
-    var paused = false, pauseStartTime, wasPaused = false;
-
-    // Enso animation variables
-    var angle = -84, radians = (angle + 8) * (Math.PI / 180),
-        angleSweep = 343.5, sweepRadians = angleSweep * (Math.PI / 180),
-        dashOffset = 0, dashSweep = 1187,
-        angleIncr, radianIncr, dashIncr,
+      // Enso animation variables
+      var angle = -84,
+        radians = (angle + 8) * (Math.PI / 180),
+        angleSweep = 343.5,
+        sweepRadians = angleSweep * (Math.PI / 180),
+        dashOffset = 0,
+        dashSweep = 1187,
+        angleIncr,
+        radianIncr,
+        dashIncr,
         radius = 198;
 
-    // Sound element variable
-    var sound;
+      // Sound element variables
+      var soundKeyLSKey = "pt-sound";
+      var localStorageSound = localStorage.getItem(soundKeyLSKey);
+      var startingSoundKey = localStorageSound ? localStorageSound : "bright";
+      var sound;
 
-    // Timeout variables
-    var fadeOutButtons, endMessageFade;
+      // Timeout variables
+      var fadeOutButtons, endMessageFade;
 
-    // Reset pop state handler in case of page reload
-    window.onpopstate = null;
+      // Reset pop state handler in case of page reload
+      window.onpopstate = null;
 
-    window.onload = function () {
-      body = document.querySelector("body");
+      window.onload = function () {
+        body = document.querySelector("body");
 
-      choose = document.querySelector("#choose");
-      timeInputs = document.querySelectorAll(".time-input");
-      radioLeft = document.querySelector(".radio-left");
-      radioRight = document.querySelector(".radio-right");
+        choose = document.querySelector("#choose");
+        timeInputs = document.querySelectorAll(".time-input");
+        radioEnso = document.querySelector(".radio-enso");
+        radioDigital = document.querySelector(".radio-digital");
 
-      enso = document.querySelector("#enso");
-      rect = document.querySelector("rect");
-      circle = document.querySelector("circle");
-      stop = document.getElementById("opaqueStop");
+        enso = document.querySelector("#enso");
+        rect = document.querySelector("rect");
+        circle = document.querySelector("circle");
+        stop = document.getElementById("opaqueStop");
 
-      digital = document.querySelector("#digital")
-      digits = document.querySelector("#digits");
+        digital = document.querySelector("#digital");
+        digits = document.querySelector("#digits");
 
-      setChooseScreenHandlers();
-    }
+        document.settings.sounds.value = startingSoundKey;
+        document.settings.hours.value = startingTimerValues.hours;
+        document.settings.mins.value = startingTimerValues.mins;
+        document.settings.secs.value = startingTimerValues.secs;
 
-    function setChooseScreenHandlers() {
-      for (var i = 0; i < timeInputs.length; i++) {
-        var entry = timeInputs[i];
-        entry.addEventListener("keydown", scopeCatchArrows(i));
-      }
+        setCheckmarkOnFaceRadioButtons();
 
-      function scopeCatchArrows(i) {
-        return function catchArrows(e) {
-          var code = e.keyCode;
-          // catches up and down arrows to move between number fields
-          if (code == 38 || code == 40) {
-            e.preventDefault();
-            // up arrow
-            if (code == 38) {
-              var toIndex = i - 1 >= 0 ? i - 1 : 2;
-              timeInputs[toIndex].focus();
-            }
-            // down arrow
-            else {
-              var toIndex = (i + 1) % 3;
-              timeInputs[toIndex].focus();
-            }
-          }
-        }
-      }
-
-      radioLeft.onclick = scopeToggleRadio(radioRight, "enso");
-      radioRight.onclick = scopeToggleRadio(radioLeft, "digital");
-
-      function scopeToggleRadio(other, faceName) {
-        return function(e) {
-          e.preventDefault();
-          this.classList.add("selected");
-          other.classList.remove("selected");
-          face = faceName;
-        }
-      }
-
-      var soundsSelect = document.querySelector(".sounds"),
-          soundsTile = document.querySelector("#sounds-tile");
-
-      soundsTile.onclick = function(e) {
-        e.preventDefault();
-        var opacity = getComputedStyle(soundsSelect).opacity;
-        if (opacity == 1)
-          soundsSelect.blur();
-        else if (opacity == 0)
-          soundsSelect.focus();
+        setChooseScreenHandlers();
       };
 
-      document.querySelector("#settings").onsubmit = setTimer;
-    }
-
-    function setTimer(e) {
-      e.preventDefault();
-
-      setSound();
-
-      hours = Number(document.settings.hours.value);
-      mins = Number(document.settings.mins.value);
-      secs = Number(document.settings.secs.value);
-      duration = ((hours * 3600) + (mins * 60) + secs) * 1000;
-
-      choose.style.display = "none";
-
-      if (face == "enso") {
-        primaryTime = duration * 0.954;
-        tailTime = duration - primaryTime;
-        angleIncr = angleSweep / primaryTime,
-        radianIncr = sweepRadians / primaryTime,
-        dashIncr = dashSweep / primaryTime;
-
-        setFPS();
-
-        body.style.background = "white";
-        enso.style.display = "block";
-      }
-      else if (face == "digital") {
-        body.style.background = "black";
-        digital.style.display = "block";
+      function setCheckmarkOnFaceRadioButtons() {
+        var [selected, notSelected] =
+          face === "enso"
+            ? [radioEnso, radioDigital]
+            : [radioDigital, radioEnso];
+        selected.classList.add("selected");
+        notSelected.classList.remove("selected");
       }
 
-      scrollTo(0, 0);
-
-      startTimer();
-    }
-
-    function startTimer() {
-      // Make possible to use back button to navigate back from a timer face
-      if (wasPaused != true) {
-        if (history.state === null)
-          history.pushState({}, "");
-        else
-          history.replaceState({}, "");
-        window.onpopstate = handlePopState;
+      function saveTimerSettingsInLocalStorage() {
+        localStorage.setItem(faceLSKey, face);
+        localStorage.setItem(soundKeyLSKey, document.settings.sounds.value);
+        localStorage.setItem(hoursLSKey, document.settings.hours.value);
+        localStorage.setItem(minsLSKey, document.settings.mins.value);
+        localStorage.setItem(secsLSKey, document.settings.secs.value);
       }
-      addWindowListeners();
 
-      if (face == "enso") {
-        if (!wasPaused) {
-          timeAlert = document.querySelector("#enso-time-alert");
-          clickMessage = document.querySelector("#enso-click-message");
-          timeAlert.innerHTML = pluralizeTime([[hours, "hour"], [mins, "minute"],
-          [secs, "second"]]);
-          setMessageFadeOut();
+      function setChooseScreenHandlers() {
+        for (var i = 0; i < timeInputs.length; i++) {
+          var entry = timeInputs[i];
+          entry.addEventListener("keydown", scopeCatchArrows(i));
         }
-        if (shortDur == false)
-          runFPS(fpsInterval);
-        else
-          requestAnimationFrame(animateEnso);
-      }
-      else if (face == "digital") {
-        if (!wasPaused) {
-          timeAlert = document.querySelector("#digital-time-alert");
-          clickMessage = document.querySelector("#digital-click-message");
-          setMessageFadeOut();
+
+        function scopeCatchArrows(i) {
+          return function catchArrows(e) {
+            var code = e.keyCode;
+            // catches up and down arrows to move between number fields
+            if (code == 38 || code == 40) {
+              e.preventDefault();
+              // up arrow
+              if (code == 38) {
+                var toIndex = i - 1 >= 0 ? i - 1 : 2;
+                timeInputs[toIndex].focus();
+              }
+              // down arrow
+              else {
+                var toIndex = (i + 1) % 3;
+                timeInputs[toIndex].focus();
+              }
+            }
+          };
         }
-        runDigital();
+
+        radioEnso.onclick = scopeToggleRadio(radioDigital, "enso");
+        radioDigital.onclick = scopeToggleRadio(radioEnso, "digital");
+
+        function scopeToggleRadio(other, faceName) {
+          return function (e) {
+            e.preventDefault();
+            this.classList.add("selected");
+            other.classList.remove("selected");
+            face = faceName;
+          };
+        }
+
+        var soundsSelect = document.querySelector(".sounds"),
+          soundsTile = document.querySelector("#sounds-tile");
+
+        soundsTile.onclick = function (e) {
+          e.preventDefault();
+          var opacity = getComputedStyle(soundsSelect).opacity;
+          if (opacity == 1) soundsSelect.blur();
+          else if (opacity == 0) soundsSelect.focus();
+        };
+
+        document.querySelector("#settings").onsubmit = setTimer;
       }
 
-      function setMessageFadeOut() {
-        setTimeout(function () {
-          timeAlert.classList.add("fade");
-          clickMessage.classList.add("fade");
-        }, 50);
-      }
-    }
+      function setTimer(e) {
+        e.preventDefault();
 
-    function setFPS() {
-      var secs = duration / 1000, mins = secs / 60, fps;
-      if (secs < 120) {
-        shortDur = true;
-        return;
-      }
-      else {
-        shortDur = false;
-        if (mins <= 5)
-          fps = Math.ceil(45 - ((mins - 2) * 5) );
-        else if (mins <= 10)
-          fps = Math.ceil(30 - ((mins - 5) * 2) );
-        else if (mins > 10 && mins <= 15)
-          fps = 20;
-        else if (mins < 20)
-          fps = Math.ceil(20 - ((mins - 15) * 2));
-        else if (mins < 30)
-          fps = mins < 25 ? 6 : 4;
-        else
-          fps = 2;
-      }
-      fpsInterval = Math.ceil(1000 / fps);
-    }
+        setSound();
 
-    function setSound() {
-      var soundKey = document.settings.sounds.value;
-      var sounds = {
-        "bright": "bright-bowl.mp3",
-        "catalpa": "catalpa-flute.mp3",
-        "catalpaRedux": "catalpa-flute-redux.mp3",
-        "clearG": "clear-g-bowl.mp3",
-        "engyoji": "engyoji-bell.mp3",
-        "high": "high-bowl.mp3",
-        "low": "low-singing-bowl.mp3",
-        "singing": "singing-bowl.mp3",
-        "streamTingsha": "stream-tingsha.mp3",
-        "woodblocks": "woodblocks.mp3"
-      }
-      sound = new Audio("./sounds/" + sounds[soundKey]);
+        hours = Number(document.settings.hours.value);
+        mins = Number(document.settings.mins.value);
+        secs = Number(document.settings.secs.value);
+        duration = (hours * 3600 + mins * 60 + secs) * 1000;
 
-      // Prep end sound to be triggered by script in mobile browsers
-      sound.load();
-      sound.play();
-      sound.pause();
-    }
+        saveTimerSettingsInLocalStorage();
 
-    function runDigital() {
-      var run = setInterval(function() {
-        if (duration > -2000)
-          requestAnimationFrame(animateDigital)
-        if (paused == true)
-          clearInterval(run);
-      }, 100);
-    }
+        choose.style.display = "none";
 
-    function runFPS(fpsInterval) {
-      var run = setInterval(function() {
-        if (duration > -2000)
-          requestAnimationFrame(animateEnso)
-        if (paused == true)
-          clearInterval(run);
-      }, fpsInterval);
-    }
+        if (face == "enso") {
+          primaryTime = duration * 0.954;
+          tailTime = duration - primaryTime;
+          (angleIncr = angleSweep / primaryTime),
+            (radianIncr = sweepRadians / primaryTime),
+            (dashIncr = dashSweep / primaryTime);
 
-    function animateDigital(time) {
-      if (paused) {
-        catchPauseInterval(time);
-        return;
-      }
-      else if (lastTime != null) {
-        if (wasPaused)
-          resumeFromPause(time);
-        elapsed = time - lastTime;
-        duration -= elapsed;
-      }
-      lastTime = time;
+          setFPS();
 
-      if (duration <= 0) {
-        endTimer();
-        return;
+          body.style.background = "white";
+          enso.style.display = "block";
+        } else if (face == "digital") {
+          body.style.background = "black";
+          digital.style.display = "block";
+        }
+
+        scrollTo(0, 0);
+
+        startTimer();
       }
 
-      var secs = Math.floor(duration / 1000) % 60,
+      function startTimer() {
+        // Make possible to use back button to navigate back from a timer face
+        if (wasPaused != true) {
+          if (history.state === null) history.pushState({}, "");
+          else history.replaceState({}, "");
+          window.onpopstate = handlePopState;
+        }
+        addWindowListeners();
+
+        if (face == "enso") {
+          if (!wasPaused) {
+            timeAlert = document.querySelector("#enso-time-alert");
+            clickMessage = document.querySelector("#enso-click-message");
+            timeAlert.classList.remove("at-completion");
+            clickMessage.classList.remove("at-completion");
+            timeAlert.innerHTML = pluralizeTime([
+              [hours, "hour"],
+              [mins, "minute"],
+              [secs, "second"],
+            ]);
+            setMessageFadeOut();
+          }
+          if (shortDur == false) runFPS(fpsInterval);
+          else requestAnimationFrame(animateEnso);
+        } else if (face == "digital") {
+          if (!wasPaused) {
+            timeAlert = document.querySelector("#digital-time-alert");
+            clickMessage = document.querySelector("#digital-click-message");
+            setMessageFadeOut();
+          }
+          runDigital();
+        }
+
+        function setMessageFadeOut() {
+          setTimeout(function () {
+            timeAlert.classList.add("fade");
+            clickMessage.classList.add("fade");
+          }, 50);
+        }
+      }
+
+      function setFPS() {
+        var secs = duration / 1000,
+          mins = secs / 60,
+          fps;
+        if (secs < 120) {
+          shortDur = true;
+          return;
+        } else {
+          shortDur = false;
+          if (mins <= 5) fps = Math.ceil(45 - (mins - 2) * 5);
+          else if (mins <= 10) fps = Math.ceil(30 - (mins - 5) * 2);
+          else if (mins > 10 && mins <= 15) fps = 20;
+          else if (mins < 20) fps = Math.ceil(20 - (mins - 15) * 2);
+          else if (mins < 30) fps = mins < 25 ? 6 : 4;
+          else fps = 2;
+        }
+        fpsInterval = Math.ceil(1000 / fps);
+      }
+
+      function setSound() {
+        var soundKey = document.settings.sounds.value;
+        var sounds = {
+          bright: "bright-bowl.mp3",
+          catalpa: "catalpa-flute.mp3",
+          catalpaRedux: "catalpa-flute-redux.mp3",
+          clearG: "clear-g-bowl.mp3",
+          engyoji: "engyoji-bell.mp3",
+          high: "high-bowl.mp3",
+          low: "low-singing-bowl.mp3",
+          singing: "singing-bowl.mp3",
+          streamTingsha: "stream-tingsha.mp3",
+          woodblocks: "woodblocks.mp3",
+        };
+        sound = new Audio("./sounds/" + sounds[soundKey]);
+
+        // Prep end sound to be triggered by script in mobile browsers
+        sound.load();
+        sound.play();
+        sound.pause();
+      }
+
+      function runDigital() {
+        var run = setInterval(function () {
+          if (duration > -2000) requestAnimationFrame(animateDigital);
+          if (paused == true) clearInterval(run);
+        }, 100);
+      }
+
+      function runFPS(fpsInterval) {
+        var run = setInterval(function () {
+          if (duration > -2000) requestAnimationFrame(animateEnso);
+          if (paused == true) clearInterval(run);
+        }, fpsInterval);
+      }
+
+      function animateDigital(time) {
+        if (paused) {
+          catchPauseInterval(time);
+          return;
+        } else if (lastTime != null) {
+          if (wasPaused) resumeFromPause(time);
+          elapsed = time - lastTime;
+          duration -= elapsed;
+        }
+        lastTime = time;
+
+        if (duration <= 0) {
+          endTimer();
+          return;
+        }
+
+        var secs = Math.floor(duration / 1000) % 60,
           mins = Math.floor(duration / 60000) % 60,
           hours = Math.floor(duration / 3600000),
           minsSecs = leftPad(mins) + ":" + leftPad(secs);
 
-      digits.innerHTML = hours > 0 ? hours + ":" + minsSecs :
-        minsSecs;
-    }
+        digits.innerHTML = hours > 0 ? hours + ":" + minsSecs : minsSecs;
+      }
 
-    function animateEnso(time) {
-      if (paused) {
-        catchPauseInterval(time);
-        return;
-      }
-      else if (lastTime != null) {
-        if (wasPaused)
-          resumeFromPause(time);
-        elapsed = time - lastTime;
-        angle -= angleIncr * elapsed;
-        radians -= radianIncr * elapsed;
-        dashOffset += dashIncr * elapsed;
-        duration -= elapsed;
-      }
-      lastTime = time;
+      function animateEnso(time) {
+        if (paused) {
+          catchPauseInterval(time);
+          return;
+        } else if (lastTime != null) {
+          if (wasPaused) resumeFromPause(time);
+          elapsed = time - lastTime;
+          angle -= angleIncr * elapsed;
+          radians -= radianIncr * elapsed;
+          dashOffset += dashIncr * elapsed;
+          duration -= elapsed;
+        }
+        lastTime = time;
 
-      if (duration <= 0) {
-        endTimer();
-        return;
-      }
-      else if (duration >= tailTime) {
-        var x = 210 + Math.cos(radians) * radius,
+        if (duration <= 0) {
+          endTimer();
+          return;
+        } else if (duration >= tailTime) {
+          var x = 210 + Math.cos(radians) * radius,
             y = 210 + Math.sin(radians) * radius,
             transfX = x + 40,
             transfY = y + 40,
             transform = "rotate(" + angle + "," + transfX + "," + transfY + ")";
 
-        rect.setAttribute("x", x);
-        rect.setAttribute("y", y);
-        rect.setAttribute("transform", transform);
-        circle.style['stroke-dashoffset'] = dashOffset;
-      }
-      else if (duration < tailTime) {
-        var opacity = duration / tailTime;
-        stop.style["stop-opacity"] = opacity;
-      }
-      if (shortDur == true)
-        requestAnimationFrame(animateEnso)
-    }
-
-    function catchPauseInterval(time) {
-      pauseStartTime = time;
-      wasPaused = true;
-    }
-
-    function resumeFromPause(time) {
-      var pauseInterval = time - pauseStartTime;
-      lastTime += pauseInterval;
-      wasPaused = false;
-    }
-
-    function endTimer() {
-      paused = true;
-      sound.play();
-      timeAlert.classList.remove("fade");
-      timeAlert.innerHTML = "session complete";
-      endMessageFade = setTimeout(function() {
-        timeAlert.classList.add("fade");
-      }, 7000);
-      removeWindowListeners();
-      removeFaceButtons();
-      addElementListeners(window, revertToChoose);
-    }
-
-    function addWindowListeners() {
-      window.addEventListener("click", revealFaceButtons);
-      window.addEventListener("keydown", revealFaceButtons);
-      window.addEventListener("touchstart", revealFaceButtons);
-    }
-
-    function removeWindowListeners() {
-      window.removeEventListener("click", revealFaceButtons);
-      window.removeEventListener("keydown", revealFaceButtons);
-      window.removeEventListener("touchstart", revealFaceButtons);
-    }
-
-    function addElementListeners(element, func) {
-      element.addEventListener("click", func);
-      element.addEventListener("touchstart", func);
-    }
-
-    function removeElementListeners(element, func) {
-      element.removeEventListener("click", func);
-      element.removeEventListener("touchstart", func);
-    }
-
-    function removeFaceButtons() {
-      var buttons = document.querySelectorAll(".face-button");
-
-      for (var i = 0; i < buttons.length; i++) {
-        var el = buttons[i];
-        el.classList.add('fade');
-        if (/pause/.test(el.id)) {
-          removeElementListeners(el, handlePauseButton);
-          el.style.display = "block";
+          rect.setAttribute("x", x);
+          rect.setAttribute("y", y);
+          rect.setAttribute("transform", transform);
+          circle.style["stroke-dashoffset"] = dashOffset;
+        } else if (duration < tailTime) {
+          var opacity = duration / tailTime;
+          stop.style["stop-opacity"] = opacity;
         }
-        else if (/cancel/.test(el.id)) {
-          removeElementListeners(el, revertToChoose);
-        }
-        else if (/resume/.test(el.id)) {
-          removeElementListeners(el, handleResumeButton);
-          scopeButtonDisplayTimeout(el, 600);
-        }
+        if (shortDur == true) requestAnimationFrame(animateEnso);
       }
 
-      function scopeButtonDisplayTimeout(el, interval) {
-        setTimeout(function () {
-          el.style.display = "none";
-        }, interval)
+      function catchPauseInterval(time) {
+        pauseStartTime = time;
+        wasPaused = true;
       }
-    }
 
-    function revealFaceButtons(e) {
-      e.preventDefault();
-      var selector = "." + face + "-button";
-      var buttons = document.querySelectorAll(selector);
-
-      for (var i = 0; i < buttons.length; i++) {
-        var el = buttons[i];
-        el.classList.remove("fade");
-        if (/pause/.test(el.id)) {
-          addElementListeners(el, handlePauseButton);
-        }
-        else if (/cancel/.test(el.id)) {
-          addElementListeners(el, revertToChoose);
-        }
-        else if (/resume/.test(el.id)) {
-          addElementListeners(el, handleResumeButton);
-        }
+      function resumeFromPause(time) {
+        var pauseInterval = time - pauseStartTime;
+        lastTime += pauseInterval;
+        wasPaused = false;
       }
-      removeWindowListeners();
 
-      fadeOutButtons = setTimeout(function() {
+      function endTimer() {
+        paused = true;
+        sound.play();
+        timeAlert.classList.add("at-completion");
+        clickMessage.classList.add("at-completion");
+        timeAlert.classList.remove("fade");
+        timeAlert.innerHTML = "session complete";
+        endMessageFade = setTimeout(function () {
+          timeAlert.classList.add("fade");
+        }, 7000);
+        removeWindowListeners();
         removeFaceButtons();
-        addWindowListeners();
-      }, 6000);
-    }
+        addElementListeners(window, revertToChoose);
+      }
 
-    function handlePauseButton(e) {
-      e.preventDefault();
-      clearTimeout(fadeOutButtons);
-      paused = true;
+      function addWindowListeners() {
+        window.addEventListener("click", revealFaceButtons);
+        window.addEventListener("keydown", revealFaceButtons);
+        window.addEventListener("touchstart", revealFaceButtons);
+      }
 
-      var pauseButton = e.target,
+      function removeWindowListeners() {
+        window.removeEventListener("click", revealFaceButtons);
+        window.removeEventListener("keydown", revealFaceButtons);
+        window.removeEventListener("touchstart", revealFaceButtons);
+      }
+
+      function addElementListeners(element, func) {
+        element.addEventListener("click", func);
+        element.addEventListener("touchstart", func);
+      }
+
+      function removeElementListeners(element, func) {
+        element.removeEventListener("click", func);
+        element.removeEventListener("touchstart", func);
+      }
+
+      function removeFaceButtons() {
+        var buttons = document.querySelectorAll(".face-button");
+
+        for (var i = 0; i < buttons.length; i++) {
+          var el = buttons[i];
+          el.classList.add("fade");
+          if (/pause/.test(el.id)) {
+            removeElementListeners(el, handlePauseButton);
+            el.style.display = "block";
+          } else if (/cancel/.test(el.id)) {
+            removeElementListeners(el, revertToChoose);
+          } else if (/resume/.test(el.id)) {
+            removeElementListeners(el, handleResumeButton);
+            scopeButtonDisplayTimeout(el, 600);
+          }
+        }
+
+        function scopeButtonDisplayTimeout(el, interval) {
+          setTimeout(function () {
+            el.style.display = "none";
+          }, interval);
+        }
+      }
+
+      function revealFaceButtons(e) {
+        e.preventDefault();
+        var selector = "." + face + "-button";
+        var buttons = document.querySelectorAll(selector);
+
+        for (var i = 0; i < buttons.length; i++) {
+          var el = buttons[i];
+          el.classList.remove("fade");
+          if (/pause/.test(el.id)) {
+            addElementListeners(el, handlePauseButton);
+          } else if (/cancel/.test(el.id)) {
+            addElementListeners(el, revertToChoose);
+          } else if (/resume/.test(el.id)) {
+            addElementListeners(el, handleResumeButton);
+          }
+        }
+        removeWindowListeners();
+
+        fadeOutButtons = setTimeout(function () {
+          removeFaceButtons();
+          addWindowListeners();
+        }, 6000);
+      }
+
+      function handlePauseButton(e) {
+        e.preventDefault();
+        clearTimeout(fadeOutButtons);
+        paused = true;
+
+        var pauseButton = e.target,
           resumeButton,
           pClass = pauseButton.className;
 
-      if (/enso/.test(pClass)) {
-        resumeButton = document.querySelector("#enso-resume");
-      }
-      else if (/digital/.test(pClass)) {
-        resumeButton = document.querySelector("#digital-resume");
-      }
+        if (/enso/.test(pClass)) {
+          resumeButton = document.querySelector("#enso-resume");
+        } else if (/digital/.test(pClass)) {
+          resumeButton = document.querySelector("#digital-resume");
+        }
 
-      pauseButton.style.display = "none";
-      resumeButton.style.display = "block";
-    }
-
-    function handlePopState(e) {
-      revertToChoose(e);
-    }
-
-    function handleResumeButton(e) {
-      e.preventDefault();
-      clearTimeout(fadeOutButtons);
-      paused = false;
-      removeFaceButtons();
-      setTimeout(function() {
-        startTimer(face);
-      }, 25);
-    }
-
-    function revertToChoose(e) {
-      e.preventDefault();
-      paused = true;
-
-      if (face == "digital")
-        digits.innerHTML = "";
-
-      if (face == "enso")
-        resetAnimation();
-
-      var faces = document.querySelectorAll(".timer-face");
-      for (var i = 0; i < faces.length; i++) {
-        faces[i].style.display = "none";
+        pauseButton.style.display = "none";
+        resumeButton.style.display = "block";
       }
 
-      var interval = fpsInterval ? fpsInterval + 200 : 200;
-      setTimeout(function() {
+      function handlePopState(e) {
+        revertToChoose(e);
+      }
+
+      function handleResumeButton(e) {
+        e.preventDefault();
+        clearTimeout(fadeOutButtons);
         paused = false;
-        wasPaused = false;
-        lastTime = null;
-      }, interval);
+        removeFaceButtons();
+        setTimeout(function () {
+          startTimer(face);
+        }, 25);
+      }
 
-      clearTimeout(endMessageFade);
-      clearTimeout(fadeOutButtons);
+      function revertToChoose(e) {
+        e.preventDefault();
+        paused = true;
 
-      removeElementListeners(window, revertToChoose);
-      removeWindowListeners();
+        if (face == "digital") digits.innerHTML = "";
 
-      removeFaceButtons();
-      timeAlert.innerHTML = "";
-      timeAlert.classList.remove('fade');
-      clickMessage.classList.remove('fade');
+        if (face == "enso") resetAnimation();
 
-      body.style.background = "#FAF4E3";
-      choose.style.display = "block";
+        var faces = document.querySelectorAll(".timer-face");
+        for (var i = 0; i < faces.length; i++) {
+          faces[i].style.display = "none";
+        }
 
-      if (sound)
-        sound.pause();
-      sound = null;
+        var interval = fpsInterval ? fpsInterval + 200 : 200;
+        setTimeout(function () {
+          paused = false;
+          wasPaused = false;
+          lastTime = null;
+        }, interval);
 
-      window.onpopstate = null;
-    }
+        clearTimeout(endMessageFade);
+        clearTimeout(fadeOutButtons);
 
-    function resetAnimation() {
-      angle = -84;
-      radians = (angle + 8) * (Math.PI / 180);
-      dashOffset = 0;
-      stop.style["stop-opacity"] = 1;
-    }
+        removeElementListeners(window, revertToChoose);
+        removeWindowListeners();
 
-    function leftPad(n) {
-      return n < 10 ? "0" + n : "" + n;
-    }
+        removeFaceButtons();
+        timeAlert.innerHTML = "";
+        timeAlert.classList.remove("fade");
+        clickMessage.classList.remove("fade");
 
-    function pluralizeTime(units) {
-      var time = "";
+        body.style.background = "#FAF4E3";
+        choose.style.display = "block";
 
-      units.forEach(function(unit) {
-        var num = unit[0], name = unit[1], numStr = num + " ";
-        if (num)
-          time += num > 1 ? numStr + name + "s, " : numStr + name + ", ";
-      });
+        if (sound) sound.pause();
+        sound = null;
 
-      time = time.slice(0, -2);
+        window.onpopstate = null;
+      }
 
-      var lastComma = time.lastIndexOf(",");
+      function resetAnimation() {
+        angle = -84;
+        radians = (angle + 8) * (Math.PI / 180);
+        dashOffset = 0;
+        stop.style["stop-opacity"] = 1;
+      }
 
-      if (lastComma > -1)
-        time = time.slice(0, lastComma) + time.slice(lastComma).replace(",", " and");
+      function leftPad(n) {
+        return n < 10 ? "0" + n : "" + n;
+      }
 
-      return time;
-    }
+      function pluralizeTime(units) {
+        var time = "";
 
-  </script>
-</body>
+        units.forEach(function (unit) {
+          var num = unit[0],
+            name = unit[1],
+            numStr = num + " ";
+          if (num)
+            time += num > 1 ? numStr + name + "s, " : numStr + name + ", ";
+        });
+
+        time = time.slice(0, -2);
+
+        var lastComma = time.lastIndexOf(",");
+
+        if (lastComma > -1)
+          time =
+            time.slice(0, lastComma) +
+            time.slice(lastComma).replace(",", " and");
+
+        return time;
+      }
+    </script>
+  </body>
 </html>

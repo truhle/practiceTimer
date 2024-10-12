@@ -1,9 +1,6 @@
 {
-  "firebase": "glowing-fire-3715",
-  "public": "practice-timer",
-  "ignore": [
-    "firebase.json",
-    "**/.*",
-    "**/node_modules/**"
-  ]
+  "hosting": {
+    "public": "practice-timer",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
 }

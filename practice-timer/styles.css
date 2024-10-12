@@ -33,7 +33,6 @@ div.digital-button {
   cursor: pointer;
 }
 
-
 div#digital-cancel {
   top: 27vh;
   left: -20vh;
@@ -142,34 +141,33 @@ div.container {
   justify-content: center;
 }
 
-div.radio-left {
+div.radio-enso {
   margin-right: 5vmin;
 }
 
-div.radio-left:hover, div.radio-left:active {
+div.radio-enso:hover, div.radio-enso:active {
   background: white;
 }
 
-div.radio-left.selected {
+div.radio-enso.selected {
   background: white;
   box-shadow: 0 0 2vmin steelblue;
 }
 
-div.radio-right {
+div.radio-digital {
   margin: 0;
 }
 
-
-div.radio-right:hover, div.radio-right:active {
+div.radio-digital:hover, div.radio-digital:active {
   background: black;
 }
 
-div.radio-right.selected {
+div.radio-digital.selected {
   background: black;
   box-shadow: 0 0 2vmin steelblue;
 }
 
-div.radio-right p {
+div.radio-digital p {
   vertical-align: middle;
   color: lightsteelblue;
   /*color: steelblue;*/
@@ -219,7 +217,7 @@ div.tile {
   position: relative;
 }
 
-div.tile:hover, div.tile > *:hover{
+div.tile:hover, div.tile > *:hover {
   cursor: pointer;
 }
 
@@ -231,7 +229,7 @@ h1 {
   font-size: 12vh;
   text-align: center;
   margin-bottom: 2vh;
-  margin-top:1vh;
+  margin-top: 1vh;
   color: #4D4A44;
   font-weight: 500;
   letter-spacing: 3vmin;
@@ -261,8 +259,8 @@ input[type="radio"] {
 input[type="submit"] {
   display: block;
   background: none;
+  border: 1px solid black;
   border-radius: 3.5vh;
-  border-style: solid;
   outline: 0;
   width: 46vmin;
   margin: 2vh auto 0 auto;
@@ -373,6 +371,7 @@ p#digits {
   /*color: azure;*/
   /*color: wheat;*/
 }
+
 div.abs-center {
   position: absolute;
   width: 1px;
@@ -380,6 +379,7 @@ div.abs-center {
   top: 50%;
   left: 50%;
 }
+
 div.center-marker {
   position: relative;
   display: inline-block;
@@ -426,6 +426,9 @@ p#enso-time-alert {
   transition: opacity 3s;
   transition-delay: 3s;
 }
+p#enso-time-alert.at-completion {
+  margin-top: 0;
+}
 
 p#enso-time-alert.fade {
   opacity: 0;
@@ -442,6 +445,9 @@ p#enso-click-message {
   transition-delay: 3s;
 }
 
+p#enso-click-message.at-completion {
+  display: none;
+}
 p#enso-click-message.fade {
   opacity: 0;
 }
@@ -459,7 +465,6 @@ select {
   -ms-transform: translate(0, -9vh);
   cursor: pointer;
   border: none;
-
   -webkit-transition: all .3s ease .15s;
   -moz-transition: all .3s ease .15s;
   -o-transition: all .3s ease .15s;
